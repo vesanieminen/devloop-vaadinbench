@@ -47,7 +47,7 @@ class ContactViewVerifierTest extends SpringBrowserlessTest {
     @DisplayName("the view is reachable at /contact and shows a Contact heading")
     void viewIsReachableAndShowsHeading() {
         openContact();
-        assertTrue($(H1.class).withText("Contact").exists(),
+        assertTrue(find(H1.class).withText("Contact").exists(),
                 "The view must show a heading with the text \"Contact\"");
     }
 
@@ -228,20 +228,20 @@ class ContactViewVerifierTest extends SpringBrowserlessTest {
         fillIn("Ada Lovelace", "ada@example.com", "", "Half a thought");
 
         UI.getCurrent().navigate("about");
-        assertTrue($(H1.class).withText("Contact").exists(),
+        assertTrue(find(H1.class).withText("Contact").exists(),
                 "Navigating away with an unfinished message must not leave the view yet");
-        assertTrue($(Dialog.class).exists(),
+        assertTrue(find(Dialog.class).exists(),
                 "Navigating away with an unfinished message must ask the user first");
 
         test(button("Keep editing")).click();
-        assertTrue($(H1.class).withText("Contact").exists(),
+        assertTrue(find(H1.class).withText("Contact").exists(),
                 "\"Keep editing\" must stay on the contact view");
         assertEquals("Half a thought", messageField().getValue(),
                 "\"Keep editing\" must leave the message alone");
 
         UI.getCurrent().navigate("about");
         test(button("Discard")).click();
-        assertTrue($(H1.class).withText("About").exists(),
+        assertTrue(find(H1.class).withText("About").exists(),
                 "\"Discard\" must let the navigation continue");
     }
 
@@ -251,9 +251,9 @@ class ContactViewVerifierTest extends SpringBrowserlessTest {
         openContact();
         UI.getCurrent().navigate("about");
 
-        assertTrue($(H1.class).withText("About").exists(),
+        assertTrue(find(H1.class).withText("About").exists(),
                 "An empty form has nothing to lose, so leaving it must not be interrupted");
-        assertFalse($(Dialog.class).exists(),
+        assertFalse(find(Dialog.class).exists(),
                 "An empty form has nothing to lose, so leaving it must not ask anything");
     }
 
@@ -277,19 +277,19 @@ class ContactViewVerifierTest extends SpringBrowserlessTest {
     }
 
     private TextField nameField() {
-        return $(TextField.class).withLabel("Name").single();
+        return find(TextField.class).withLabel("Name").single();
     }
 
     private EmailField emailField() {
-        return $(EmailField.class).withLabel("Email").single();
+        return find(EmailField.class).withLabel("Email").single();
     }
 
     private TextField phoneField() {
-        return $(TextField.class).withLabel("Phone").single();
+        return find(TextField.class).withLabel("Phone").single();
     }
 
     private TextArea messageField() {
-        return $(TextArea.class).withLabel("Message").single();
+        return find(TextArea.class).withLabel("Message").single();
     }
 
     private Button sendButton() {
@@ -297,12 +297,12 @@ class ContactViewVerifierTest extends SpringBrowserlessTest {
     }
 
     private Button button(String text) {
-        return $(Button.class).withText(text).single();
+        return find(Button.class).withText(text).single();
     }
 
     /** The grid listing what has been sent. */
     private Grid<?> sentGrid() {
-        return $(Grid.class).single();
+        return find(Grid.class).single();
     }
 
     private int sentCount() {
@@ -330,7 +330,7 @@ class ContactViewVerifierTest extends SpringBrowserlessTest {
 
     /** Asserts nothing was sent: no confirmation, and no new row in the list. */
     private void assertNothingSent(int countBefore) {
-        assertFalse($(Notification.class).exists(),
+        assertFalse(find(Notification.class).exists(),
                 "Nothing must be confirmed when the form is not valid");
         assertEquals(countBefore, sentCount(),
                 "An invalid form must not add anything to the list of sent messages");
@@ -338,9 +338,9 @@ class ContactViewVerifierTest extends SpringBrowserlessTest {
 
     /** Asserts the send was confirmed to the user. */
     private void assertConfirmed() {
-        assertTrue($(Notification.class).exists(),
+        assertTrue(find(Notification.class).exists(),
                 "Sending a complete message must show a confirmation");
-        assertTrue(test($(Notification.class).first()).getText().contains("Message sent"),
+        assertTrue(test(find(Notification.class).single()).getText().contains("Message sent"),
                 "The confirmation must contain the text \"Message sent\"");
     }
 

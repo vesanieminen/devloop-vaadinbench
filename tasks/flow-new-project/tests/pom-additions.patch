@@ -12,7 +12,7 @@
 # difference stays one reviewable hunk that CI can check.
 --- a/pom.xml
 +++ b/pom.xml
-@@ -52,6 +52,13 @@
+@@ -68,6 +68,13 @@
              <scope>test</scope>
          </dependency>
          <dependency>
