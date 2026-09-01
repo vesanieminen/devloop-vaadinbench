@@ -28,8 +28,8 @@ class ItemsViewVerifierTest extends SpringBrowserlessTest {
     @DisplayName("the app shell shows the application name")
     void shellShowsTheApplicationName() {
         openItems();
-        assertTrue($(AppLayout.class).exists(), "The view must be shown inside an AppLayout");
-        assertTrue($(H2.class).withText("Item Tracker").exists(),
+        assertTrue(find(AppLayout.class).exists(), "The view must be shown inside an AppLayout");
+        assertTrue(find(H2.class).withText("Item Tracker").exists(),
                 "The app shell must show an H2 with the text \"Item Tracker\"");
     }
 
@@ -37,7 +37,7 @@ class ItemsViewVerifierTest extends SpringBrowserlessTest {
     @DisplayName("the view is reachable at / and shows an Items heading")
     void viewIsReachableAndShowsHeading() {
         openItems();
-        assertTrue($(H1.class).withText("Items").exists(),
+        assertTrue(find(H1.class).withText("Items").exists(),
                 "The view must show a heading with the text \"Items\"");
     }
 
@@ -123,15 +123,15 @@ class ItemsViewVerifierTest extends SpringBrowserlessTest {
     }
 
     private TextField itemField() {
-        return $(TextField.class).withLabel("Item").single();
+        return find(TextField.class).withLabel("Item").single();
     }
 
     private Button addButton() {
-        return $(Button.class).withText("Add").single();
+        return find(Button.class).withText("Add").single();
     }
 
     private Button clearButton() {
-        return $(Button.class).withText("Clear").single();
+        return find(Button.class).withText("Clear").single();
     }
 
     private void addItem(String text) {
@@ -140,11 +140,11 @@ class ItemsViewVerifierTest extends SpringBrowserlessTest {
     }
 
     private List<String> items() {
-        return $view(ListItem.class).all().stream().map(ListItem::getText).toList();
+        return findInView(ListItem.class).all().stream().map(ListItem::getText).toList();
     }
 
     private boolean countExists(int n) {
-        return $(Span.class).withText("Items: " + n).exists();
+        return find(Span.class).withText("Items: " + n).exists();
     }
 
 }

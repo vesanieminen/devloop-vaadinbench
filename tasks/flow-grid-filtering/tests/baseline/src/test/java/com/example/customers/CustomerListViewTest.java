@@ -1,8 +1,5 @@
 package com.example.customers;
 
-import static com.github.mvysny.kaributesting.v10.GridKt._getFormattedRow;
-import static com.github.mvysny.kaributesting.v10.GridKt._size;
-import static com.github.mvysny.kaributesting.v10.LocatorJ._get;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -10,18 +7,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import com.example.customers.domain.CustomerRepository;
 import com.example.customers.domain.QueryLog;
 
-import com.github.mvysny.kaributesting.v10.MockVaadin;
-import com.github.mvysny.kaributesting.v10.Routes;
-import com.github.mvysny.kaributesting.v10.spring.MockSpringServlet;
-import com.vaadin.flow.component.UI;
+import com.example.Application;
+import com.vaadin.browserless.SpringBrowserlessTest;
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.grid.Grid;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.ApplicationContext;
 
 /**
  * Example browserless UI test. Run it with {@code mvn test}.
@@ -29,37 +22,23 @@ import org.springframework.context.ApplicationContext;
  * <p>Use this as the template for testing the view: no browser and no Node.js
  * are involved, so it runs in a couple of seconds.
  */
-@SpringBootTest
-class CustomerListViewTest {
-
-    private static Routes routes;
-
-    @Autowired
-    private ApplicationContext ctx;
+@SpringBootTest(classes = Application.class,
+        webEnvironment = SpringBootTest.WebEnvironment.MOCK)
+class CustomerListViewTest extends SpringBrowserlessTest {
 
     @Autowired
     private QueryLog queryLog;
 
-    @BeforeAll
-    static void discoverRoutes() {
-        routes = new Routes().autoDiscoverViews("com.example");
-    }
-
     @BeforeEach
     void setUpVaadin() {
-        MockVaadin.setup(() -> new UI(), new MockSpringServlet(routes, ctx, () -> new UI()));
+        navigate("", Component.class);
         queryLog.clear();
-    }
-
-    @AfterEach
-    void tearDownVaadin() {
-        MockVaadin.tearDown();
     }
 
     @Test
     void gridShowsEveryCustomer() {
-        Grid<?> grid = _get(Grid.class);
-        assertEquals(500, _size(grid));
+        Grid<?> grid = find(Grid.class).single();
+        assertEquals(500, test(grid).size());
     }
 
     /**
@@ -68,8 +47,8 @@ class CustomerListViewTest {
      */
     @Test
     void showingTheFirstRowsCostsOnePage() {
-        Grid<?> grid = _get(Grid.class);
-        _getFormattedRow(grid, 0);
+        Grid<?> grid = find(Grid.class).single();
+        test(grid).getCellText(0, 0);
 
         assertFalse(queryLog.pageQueries().isEmpty(),
                 "The grid must fetch its rows from the backend");
