@@ -14,7 +14,7 @@
 # replace, and Harbor runs those before it captures /app.
 #
 # On the same base as the agent's image — see ../environment/Dockerfile.
-ARG BASE_IMAGE=ghcr.io/vesanieminen/devloop-vaadinbench-base:25.3.0-alpha8-vaadin-dev-jdk25
+ARG BASE_IMAGE=ghcr.io/vesanieminen/devloop-vaadinbench-base@sha256:842ec5c0e830e810abb83787cb68092cf66900a1fb17967d0a8de4cb22f11435
 FROM ${BASE_IMAGE}
 
 WORKDIR /
