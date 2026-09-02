@@ -1,5 +1,8 @@
 name: pages
 
+# Pages must first be enabled in Settings -> Pages with "GitHub Actions" as the
+# source. configure-pages cannot perform that first-time setup with GITHUB_TOKEN;
+# after enablement, a dispatch or a change to this file safely retries deployment.
 on:
   push:
     branches: [main]
