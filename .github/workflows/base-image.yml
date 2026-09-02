@@ -86,8 +86,11 @@ jobs:
       - name: Every task builds on the image this workflow publishes
         run: |
           owner=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
-          echo "IMAGE=ghcr.io/$owner/vaadinbench-base" >>"$GITHUB_ENV"
-          bash .github/scripts/base-image-reference.sh "ghcr.io/$owner/vaadinbench-base"
+          # Personal GHCR packages are account-scoped, so a fixed package name
+          # can belong to another repository and reject this GITHUB_TOKEN.
+          package="${GITHUB_REPOSITORY#*/}-base"
+          echo "IMAGE=ghcr.io/$owner/$package" >>"$GITHUB_ENV"
+          bash .github/scripts/base-image-reference.sh "ghcr.io/$owner/$package"
 
       - uses: docker/setup-buildx-action@v3
 
@@ -154,7 +157,8 @@ jobs:
           # digest pinned at the end of this job.
           version=$(tr -d '[:space:]' <base/stack-version.txt)
           owner=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
-          image="ghcr.io/$owner/vaadinbench-base"
+          package="${GITHUB_REPOSITORY#*/}-base"
+          image="ghcr.io/$owner/$package"
           refs=""
           for digest in /tmp/digests/*; do
             refs="$refs $image@$(cat "$digest")"
@@ -164,6 +168,7 @@ jobs:
           list=$(docker buildx imagetools inspect "$image:$version" \
                  --format '{{.Manifest.Digest}}')
           echo "OWNER=$owner" >>"$GITHUB_ENV"
+          echo "PACKAGE=$package" >>"$GITHUB_ENV"
           echo "IMAGE=$image" >>"$GITHUB_ENV"
           echo "LIST_DIGEST=$list" >>"$GITHUB_ENV"
           docker buildx imagetools inspect "$image@$list"
@@ -188,7 +193,7 @@ jobs:
       - name: The published image is pullable by anyone
         run: |
           bash .github/scripts/anonymous-pull.sh \
-            "$OWNER/vaadinbench-base" "$LIST_DIGEST"
+            "$OWNER/$PACKAGE" "$LIST_DIGEST"
 
       # The digest, into the files that decide what a task builds on. Committing it
       # is what invalidates Harbor's task-image cache, so an existing checkout picks
