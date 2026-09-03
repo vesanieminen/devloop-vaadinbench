@@ -10,7 +10,7 @@
     <properties>
         <java.version>25</java.version>
         <vaadin.version>25.3.0-alpha8</vaadin.version>
-        <flow.version>25.3.vaadin-dev-SNAPSHOT</flow.version>
+        <flow.version>25.3-SNAPSHOT</flow.version>
         <browserless.version>1.2-SNAPSHOT</browserless.version>
     </properties>
     

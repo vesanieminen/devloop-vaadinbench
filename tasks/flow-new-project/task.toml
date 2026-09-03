@@ -27,7 +27,7 @@ generated_vaadin_version = "25.2.6"
 # one explicit, reviewable change so agents can use the early Vaadin dev loop.
 generated_pom_overlay = "tests/dev-tool-pom.patch"
 environment_vaadin_version = "25.3.0-alpha8"
-environment_flow_version = "25.3.vaadin-dev-SNAPSHOT"
+environment_flow_version = "25.3-SNAPSHOT"
 environment_browserless_version = "1.2-SNAPSHOT"
 
 [agent]
