@@ -166,7 +166,7 @@ RUN curl -fsSL https://chatgpt.com/codex/install.sh \
 # environment baseline closed during agent setup.
 #
 # Verify what the image ended up with:
-#   docker run --rm "ghcr.io/vesanieminen/vaadinbench-base:$(cat base/stack-version.txt)" \
+#   docker run --rm "ghcr.io/vesanieminen/devloop-vaadinbench-base:$(cat base/stack-version.txt)" \
 #       opencode --version
 ARG OPENCODE_VERSION=1.18.25
 RUN curl -fsSL https://opencode.ai/install \
