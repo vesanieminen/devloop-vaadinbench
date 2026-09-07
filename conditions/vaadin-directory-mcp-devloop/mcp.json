@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "vaadin-directory": {
+      "type": "http",
+      "url": "https://vaadin.com/directory/mcp"
+    }
+  }
+}

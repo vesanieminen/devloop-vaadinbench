@@ -18,5 +18,4 @@ SOURCE="$(cd "$(dirname "$0")" && pwd)/app"
 
 mkdir -p "$APP_DIR"
 cp -R "$SOURCE/." "$APP_DIR/"
-mvn -B -o -f "$APP_DIR/pom.xml" flow:install-dev-cli
 echo "Wrote the reference project to $APP_DIR"
