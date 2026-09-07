@@ -108,7 +108,7 @@ esac
 git cat-file -e "${revision}^{commit}" 2>/dev/null \
     || rebuild "$published was built from $revision, which is not in this checkout"
 
-changed=$(git diff --name-only "$revision" HEAD) \
+changed=$(git diff --no-renames --name-only "$revision" HEAD) \
     || rebuild "could not diff against $revision"
 
 while IFS= read -r path; do

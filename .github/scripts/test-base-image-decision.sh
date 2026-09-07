@@ -111,6 +111,20 @@ check "verifier source"    rebuild tasks/flow-new-view/tests/verifier/Verify.jav
 check "recorded project"   rebuild tasks/flow-new-view/tests/expected/pom.xml
 check "verifier entry"     rebuild tasks/flow-new-view/tests/test.sh
 
+# Moving an input outside the classified tree still removes it from the image.
+# Force rename detection on so this also covers machines with different defaults.
+dir=$(new_repo "$DIGEST")
+built=$(git -C "$dir" rev-parse HEAD)
+(
+    cd "$dir"
+    git config diff.renames true
+    mkdir archive
+    git mv tasks/flow-new-view/tests/expected/pom.xml archive/pom.xml
+    git commit -qm "move recorded input outside task"
+)
+out=$(cd "$dir" && bash "$DECISION" push "$built" 2>/dev/null) || true
+report "base input renamed outside classified paths" rebuild "$out"
+
 # The agents Dockerfile alone, and a change to neither, reuse it.
 check "agents Dockerfile"  reuse   base/agents.Dockerfile
 check "nothing relevant"   reuse   README.md

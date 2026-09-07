@@ -42,6 +42,3 @@ differ in one URL and nothing else; `vaadin-skills-mcp` and
 `devloop.txt` marker. The regular names have devloop off. Select a pair with
 `-c vanilla,devloop` or `-c vaadin-mcp,vaadin-mcp-devloop`. New combinations are
 ordinary directories; copy the desired files and add the marker.
-
-This fork also provides `vaadin-directory-mcp` (and its devloop counterpart),
-using `https://vaadin.com/directory/mcp` for add-on metadata.

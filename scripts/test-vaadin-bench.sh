@@ -234,8 +234,8 @@ count() { uv run --quiet vaadin-bench.py "$@" --dry-run | grep -c '^env PYTHONPA
 [ "$(count -c vaadin-skills -m sol)" = "1" ]
 [ "$(count -c 'vaadin-skills*' -m sol)" = "6" ]     # with/without devloop; tools has no Codex form
 [ "$(count -c 'vaadin-skills*' -m haiku)" = "8" ]
-[ "$(count -m luna)" = "14" ]
-[ "$(count --default)" = "30" ]
+[ "$(count -m luna)" = "12" ]
+[ "$(count --default)" = "26" ]
 
 # The prune plugin rides along unless told not to. --print-config does not echo
 # plugins, so this is read off the command line.
