@@ -32,17 +32,9 @@ suite runs in a couple of seconds. See
 `src/test/java/com/example/customers/CustomerListViewTest.java` for the pattern.
 
 The Flow Maven plugin is deliberately unbound, so `mvn test` remains pure JVM.
-It also installs the project-local Vaadin dev loop used by coding agents:
-
-```bash
-.vaadin/vaadin-dev start
-# edit sources
-.vaadin/vaadin-dev apply
-```
-
-The daemon owns the running application and hot-swaps compatible changes; do not
-start a second copy with Maven. No system Node.js installation is required for
-the prepared development bundle.
+For interactive testing, use `mvn -o spring-boot:run` and restart after source
+changes. No system Node.js installation is required for the prepared development
+bundle. Follow the condition's instructions if additional tooling is supplied.
 
 Dependency versions in `pom.xml` are pinned and the local Maven repository only
 contains those versions; run Maven with `-o` (offline).
