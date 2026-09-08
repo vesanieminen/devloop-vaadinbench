@@ -22,14 +22,18 @@ public class AppShell extends Div {
                 sidebar.add(Ui.html("<div class='nav-group'>" + label + "</div>"));
             } else {
                 boolean active = label.equals("Employees");
-                sidebar.add(Ui.html("<div class='nav-item " + (active ? "active" : "") + "' "
-                        + (active ? "data-testid='nav-employees' aria-current='page'" : "")
-                        + ">" + Ui.icon(entry[1]) + "<span>" + label + "</span></div>"));
+                Div item=new Div(Ui.icon(entry[1]),new com.vaadin.flow.component.html.Span(label));
+                item.addClassName("nav-item");
+                if(active) { item.addClassName("active"); item.getElement().setAttribute("data-testid","nav-employees"); item.getElement().setAttribute("aria-current","page"); }
+                sidebar.add(item);
             }
         }
-        sidebar.add(Ui.html("<div class='account' data-testid='account'><span class='avatar'>FL</span>"
-                + "<span>Firstname Lastname</span><span class='account-chevron'>" + Ui.icon("account-chevron") + "</span></div>"));
-        var toggle = Ui.html("<button class='menu-toggle' data-testid='menu-toggle' aria-label='Menu' aria-expanded='false'>☰</button>");
+        Div account=new Div(Ui.html("<span class='avatar'>FL</span>"),new com.vaadin.flow.component.html.Span("Firstname Lastname"));
+        account.addClassName("account"); account.getElement().setAttribute("data-testid","account");
+        var chevron=Ui.icon("account-chevron"); chevron.addClassName("account-chevron"); account.add(chevron); sidebar.add(account);
+        var toggle = new com.vaadin.flow.component.button.Button("☰");
+        toggle.addClassName("menu-toggle"); toggle.setAriaLabel("Menu");
+        toggle.getElement().setAttribute("data-testid", "menu-toggle"); toggle.getElement().setAttribute("aria-expanded", "false");
         toggle.getElement().addEventListener("click", event -> {
             var classes = sidebar.getElement().getClassList();
             boolean open = !classes.contains("drawer-open");

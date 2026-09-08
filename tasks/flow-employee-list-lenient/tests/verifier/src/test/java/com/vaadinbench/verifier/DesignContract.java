@@ -25,7 +25,10 @@ public final class DesignContract {
         profile = selected.getAsJsonObject();
     }
 
-    public double minimumSsim() { return profile.get("ssimMinimum").getAsDouble(); }
+    public double minimumSsim(String region) {
+        JsonObject overrides=profile.getAsJsonObject("ssimRegionMinimum");
+        return overrides!=null && overrides.has(region) ? overrides.get(region).getAsDouble() : profile.get("ssimMinimum").getAsDouble();
+    }
 
     public List<PixelComparison.Region> regions(String state) {
         List<PixelComparison.Region> result = new ArrayList<>();
@@ -38,7 +41,8 @@ public final class DesignContract {
     }
 
     public static Locator locate(Page page, JsonObject description) {
-        Locator locator = description.has("testId") ? page.getByTestId(description.get("testId").getAsString())
+        Locator locator = description.has("rowId") ? BrowserElements.row(page, description.get("rowId").getAsString())
+                : description.has("testId") ? page.getByTestId(description.get("testId").getAsString())
                 : page.locator(description.get("selector").getAsString());
         if (description.has("role")) {
             var options = new Locator.GetByRoleOptions();
@@ -46,6 +50,7 @@ public final class DesignContract {
             locator = locator.getByRole(AriaRole.valueOf(description.get("role").getAsString().toUpperCase(Locale.ROOT)), options);
         }
         if (description.has("index")) locator = locator.nth(description.get("index").getAsInt());
+        if (description.has("slotted")) locator = BrowserElements.content(page, locator);
         if (description.has("descendant")) locator = locator.locator(description.get("descendant").getAsString()).first();
         return locator;
     }

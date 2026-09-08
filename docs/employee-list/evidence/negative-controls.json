@@ -1,0 +1,24 @@
+[
+  {
+    "control": "no-selection",
+    "tests": "1",
+    "failures": [
+      {
+        "test": "selectionCallbacksAndNoPersistence",
+        "type": "org.opentest4j.AssertionFailedError",
+        "message": "Locator expected to be visible\nError: element(s) not found\nCall log:\n  - Assert \"isVisible\" with timeout 5000ms\n  - waiting for locator(\"internal:attr=[data-testid=\\\"employee-detail\\\"]\")"
+      }
+    ]
+  },
+  {
+    "control": "horizontal-overflow",
+    "tests": "1",
+    "failures": [
+      {
+        "test": "breakpointsReflowLiveInBothDirections",
+        "type": "org.opentest4j.AssertionFailedError",
+        "message": "Document horizontal overflow ==> expected: <true> but was: <false>"
+      }
+    ]
+  }
+]

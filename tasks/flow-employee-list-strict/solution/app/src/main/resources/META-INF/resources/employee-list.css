@@ -8,7 +8,7 @@
 * { box-sizing: border-box; }
 html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; }
 body { font: 400 16px/24px "Open Sans", sans-serif; color: #263945; background: #fff; }
-button, input, select { font-family: inherit; }
+vaadin-button, input, select { font-family: inherit; }
 .employee-app, .app-shell { height: 100dvh; width: 100%; overflow: hidden; }
 .sidebar {
   position: fixed; inset: 0 auto 0 0; width: 272px; padding: 16px;
@@ -35,9 +35,9 @@ button, input, select { font-family: inherit; }
 .metric small { font-size: 13px; line-height: 20px; }
 .metric em { font-style: normal; color: #548b27; }
 .summary-actions { margin-left: auto; display: flex; gap: 16px; }
-button { display: inline-flex; justify-content: center; align-items: center; gap: 8px; height: 48px; padding: 0 16px; font-size: 16px; line-height: 24px; font-weight: 600; color: #4b958e; background: #fff; border: 1px solid #e4e9ec; border-radius: 8px; white-space: nowrap; box-shadow: 0 1px 2px #192a340d; cursor: pointer; }
-.summary-actions button:first-child { width: 107px; }
-.summary-actions button:last-child { width: 168px; }
+vaadin-button { display: inline-flex; justify-content: center; align-items: center; gap: 8px; height: 48px; padding: 0 16px; font-size: 16px; line-height: 24px; font-weight: 600; color: #4b958e; background: #fff; border: 1px solid #e4e9ec; border-radius: 8px; white-space: nowrap; box-shadow: 0 1px 2px #192a340d; cursor: pointer; }
+.summary-actions vaadin-button:first-child { width: 107px; }
+.summary-actions vaadin-button:last-child { width: 168px; }
 .primary { background: #6ab4ac; color: #fff; border-color: #6ab4ac; }
 .workspace { display: flex; flex: 1; min-height: 0; min-width: 0; }
 .table-region { width: 100%; overflow-y: auto; overflow-x: hidden; min-width: 0; scrollbar-width: none; }
@@ -69,9 +69,6 @@ tr[aria-selected=true] .badge.active { background: #dbefe4; }
 .field { min-width: 0; margin-bottom: 12px; }
 .field label, .status-label { display: block; font-size: 14px; line-height: 21px; font-weight: 600; color: #60707b; margin-bottom: 6px; }
 .control-wrap { position: relative; }
-.field input, .field select { display: block; width: 100%; min-width: 0; height: 48px; padding: 9px; border: 1px solid #dbe1e5; border-radius: 8px; background: #fff; color: #263945; font-size: 16px; line-height: 24px; font-weight: 600; box-shadow: 0 1px 2px #192a3414; }
-.field select { appearance: none; padding-right: 32px; }
-.control-wrap .icon { position: absolute; right: 10px; top: 12px; pointer-events: none; }
 .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 .dob { width: 264px; max-width: 100%; }
 .role h3 { font-size: 18px; font-weight: 600; line-height: 28px; margin: 16px 0 12px; }
@@ -88,9 +85,9 @@ tr[aria-selected=true] .badge.active { background: #dbefe4; }
   .metric { width: 155px; }
   .summary { gap: 16px; }
   .summary-actions { gap: 8px; }
-  .summary-actions button { padding: 0 10px; }
-  .summary-actions button:first-child { width: auto; }
-  .summary-actions button:last-child { width: auto; }
+  .summary-actions vaadin-button { padding: 0 10px; }
+  .summary-actions vaadin-button:first-child { width: auto; }
+  .summary-actions vaadin-button:last-child { width: auto; }
   .with-detail .table-region table { width: 100%; }
   .with-detail .table-region th:nth-child(2), .with-detail .table-region td:nth-child(2),
   .with-detail .table-region th:nth-child(3), .with-detail .table-region td:nth-child(3),
@@ -104,7 +101,7 @@ tr[aria-selected=true] .badge.active { background: #dbefe4; }
   .radios { gap: 4px; font-size: 14px; }
   .radios label { gap: 4px; }
   .detail-footer { padding: 15px 12px; gap: 6px; }
-  .detail-footer button { font-size: 13px; padding: 0 8px; }
+  .detail-footer vaadin-button { font-size: 13px; padding: 0 8px; }
 }
 @media (max-width: 1023px) {
   .detail { position: fixed; inset: 0; width: 100%; height: 100dvh; margin: 0; z-index: 5; }
@@ -132,7 +129,7 @@ tr[aria-selected=true] .badge.active { background: #dbefe4; }
   .menu-toggle { display: flex; position: fixed; right: 8px; top: 7px; z-index: 6; height: 36px; padding: 0 9px; }
   .tabs { padding-left: 16px; padding-right: 48px; font-size: 12px; gap: 12px; }
   .summary { padding: 16px; font-size: 14px; }
-  .summary-actions button { font-size: 14px; }
+  .summary-actions vaadin-button { font-size: 14px; }
   .table-region td:first-child { padding-left: 12px; font-size: 14px; }
   .table-region th:first-child { padding-left: 12px; }
   .table-region th:nth-child(4) { width: 93px; }
@@ -146,7 +143,7 @@ tr[aria-selected=true] .badge.active { background: #dbefe4; }
 .table-region .cell-text { display: inline-block; transform: translateY(2px); }
 .badge { font-weight: 500; padding-top: 4px; padding-bottom: 0; }
 .field label { position: relative; top: 2px; font-weight: 500; }
-.field input, .field select { font-weight: 500; }
+
 .detail-header h2 { transform: translateY(-1px); }
 .tenure { transform: translateY(3px); }
 .role { display: flow-root; }
@@ -171,3 +168,106 @@ tr[aria-selected=true] .badge.active { background: #dbefe4; }
 
 .control-wrap select + .icon { width: 20px; height: 20px; right: 8px; top: 14px; }
 @media (min-width: 1400px) { .metric { width: 225px; } .summary { gap: 23px; } .tabs span:first-child { width: 107px; } }
+
+/* Vaadin 25 components: style their public properties and parts. */
+vaadin-button { margin: 0; min-width: 0; flex: none; --vaadin-button-gap: 8px; }
+vaadin-button::before, vaadin-button::after { background: transparent; box-shadow: none; }
+vaadin-button::part(label) { padding: 0; }
+vaadin-tabs.tabs { display: block; padding: 0 24px; background: #fff; border-radius: 0; box-shadow: none; }
+vaadin-tabs::part(tabs) { height: 57px; gap: 24px; padding: 0; align-items: stretch; }
+vaadin-tab { padding: 0; flex: none; min-width: 0; font: 500 16px/24px "Open Sans"; color: #80939f; background: transparent; border: 0; border-radius: 0; position: relative; }
+vaadin-tab:first-child { width: 107px; }
+vaadin-tab[selected] { color: #4b958e; background: transparent; }
+vaadin-tab::before { display: none; }
+vaadin-tab[selected]::after { content: ""; position: absolute; bottom: -1px; left: calc(50% - 15px); width: 30px; height: 2px; background: #6ab4ac; }
+vaadin-tabs::part(back-button), vaadin-tabs::part(forward-button) { display: none; }
+.field > :is(vaadin-text-field,vaadin-date-picker,vaadin-select) {
+  width: 100%; height: 48px; padding: 0; margin: 0; min-width: 0; font: 500 16px/24px "Open Sans"; color: #263945;
+  --vaadin-input-field-background: #fff; --vaadin-input-field-border-color: #dbe1e5;
+  --vaadin-input-field-border-width: 1px; --vaadin-input-field-border-radius: 8px;
+  --vaadin-input-field-value-color: #263945; --vaadin-input-field-value-font-size: 16px;
+  --vaadin-input-field-value-font-weight: 500; --vaadin-input-field-value-line-height: 24px;
+  --vaadin-input-field-padding: 9px; --vaadin-input-field-container-gap: 0;
+}
+.field > :is(vaadin-text-field,vaadin-date-picker,vaadin-select)::part(input-field) { height: 48px; min-height: 48px; box-sizing: border-box; box-shadow: 0 1px 2px #192a3414; }
+.field input { font: 500 16px/24px "Open Sans"; color: #263945; }
+vaadin-select-value-button, vaadin-select-item { font: 500 16px/24px "Open Sans"; color: #263945; }
+vaadin-radio-group.radios { padding: 0; margin: 0; }
+vaadin-radio-group::part(group-field) { display: flex; flex-direction: row; gap: 12px; }
+vaadin-radio-button { margin: 0; font-family: "Open Sans"; --vaadin-radio-button-size: 18px; --vaadin-radio-button-gap: 6px; --vaadin-radio-button-label-color: #263945; --vaadin-radio-button-label-font-size: 16px; --vaadin-radio-button-label-font-weight: 400; --vaadin-radio-button-label-line-height: 24px; }
+vaadin-radio-button::part(radio) { width: 18px; height: 18px; margin: 3px; border: 1px solid #dbe1e5; border-radius: 50%; background: #fff; box-sizing: border-box; }
+vaadin-radio-button[checked]::part(radio) { border: 6px solid #6ab4ac; }
+vaadin-radio-button::part(radio)::after { display: none; }
+.table-region { overflow: hidden; }
+vaadin-grid { border: 0; border-radius: 0; background: #fff; font: 400 16px/24px "Open Sans"; color: #263945;
+  --vaadin-grid-cell-padding: 0 8px; --vaadin-grid-border-color: #e4e9ec;
+  --vaadin-grid-row-selected-background-color: #ebf6f0; --vaadin-grid-row-hover-background-color: transparent;
+  --vaadin-grid-header-font-size: 14px; --vaadin-grid-header-font-weight: 500; --vaadin-grid-header-text-color: #263945;
+}
+vaadin-grid::part(row) { height: 52px; }
+vaadin-grid::part(cell) { box-sizing: border-box; border-bottom: 1px solid #e4e9ec; }
+vaadin-grid::part(header-cell) { height: 54px; min-height: 54px; }
+vaadin-grid::part(body-cell) { height: 52px; min-height: 52px; }
+vaadin-grid::part(first-column-cell) { --vaadin-grid-cell-padding: 0 8px 0 24px; }
+vaadin-grid-cell-content { letter-spacing: .1px; }
+.with-detail vaadin-grid { width: 1168px !important; }
+@media (max-width: 1399px) {
+  .with-detail vaadin-grid { width: 100% !important; }
+  .with-detail vaadin-grid::part(department), .with-detail vaadin-grid::part(job-title), .with-detail vaadin-grid::part(start-date) { display: none; }
+  .with-detail vaadin-grid::part(name) { flex: 1 !important; width: auto !important; }
+}
+@media (max-width: 1023px) {
+  vaadin-grid::part(department), vaadin-grid::part(job-title), vaadin-grid::part(start-date) { display: none; }
+  vaadin-grid::part(name) { flex: 1 !important; width: auto !important; }
+}
+@media (max-width: 767px) {
+  vaadin-tabs.tabs { padding-left: 16px; padding-right: 48px; }
+  vaadin-tabs::part(tabs) { gap: 12px; }
+  vaadin-tab { font-size: 12px; }
+  vaadin-tab:first-child { width: auto; }
+  vaadin-grid::part(first-column-cell) { --vaadin-grid-cell-padding: 0 8px 0 12px; font-size: 14px; }
+  vaadin-grid::part(status) { width: 93px !important; flex: none !important; }
+}
+.employee-app vaadin-button {
+ --vaadin-button-background: #fff; --vaadin-button-text-color: #4b958e;
+ --vaadin-button-border-color: #e4e9ec; --vaadin-button-border-width: 1px;
+ --vaadin-button-shadow: 0 1px 2px #192a340d; --vaadin-button-padding: 0 12px;
+ --vaadin-button-border-radius: 8px; --vaadin-button-label-wrap: nowrap;
+ background: #fff; color: #4b958e; box-shadow: 0 1px 2px #192a340d; border: 1px solid #e4e9ec; padding: 0 12px;
+}
+.employee-app vaadin-button.primary { --vaadin-button-background: #6ab4ac; background: #6ab4ac; color: #fff; border-color: #6ab4ac; }
+.employee-app vaadin-button.remove { color: #ff3030; }
+.employee-app vaadin-button::part(label) { overflow: visible; flex: none; }
+.employee-app vaadin-tab { box-shadow: none; border: 0; }
+.employee-app vaadin-grid::part(header-row) { height: 54px; background: #fff; }
+.employee-app vaadin-grid::part(cell) { background: #fff; border-bottom: 1px solid #e4e9ec; box-shadow: none; }
+.employee-app vaadin-grid::part(selected-row-cell) { background: #ebf6f0; }
+.employee-app vaadin-grid::part(body-cell) { padding-top: 3px; }
+.employee-app vaadin-grid::part(header-cell) { padding-top: 2px; }
+.employee-app vaadin-radio-button::part(radio) { box-shadow: none; }
+.employee-app vaadin-radio-button::part(radio)::before { background: #fff; color: #fff; }
+.employee-app vaadin-radio-group { display: block; }
+.employee-app vaadin-radio-group::part(group-field) { padding: 0; }
+.employee-app vaadin-tab[selected] { box-shadow: none !important; }
+.employee-app vaadin-grid::part(cell) { border: 0 !important; border-bottom: 1px solid #e4e9ec !important; }
+.employee-app vaadin-grid::part(selected-row-cell) { --employee-badge-background: #dbefe4; }
+.badge.active { background: var(--employee-badge-background, #ebf6f0); }
+.employee-app vaadin-radio-button::part(radio) { box-shadow: none !important; }
+.employee-app vaadin-radio-button[checked]::part(radio) { background: #fff !important; --vaadin-radio-button-marker-color: #fff; }
+.employee-app vaadin-radio-group::part(label) { display: none; }
+.employee-app vaadin-radio-group { --vaadin-input-field-container-gap: 0; }
+.employee-app vaadin-radio-button::part(radio) { background: #fff; }
+.table-region { border-top: 1px solid #e4e9ec; }
+.employee-app vaadin-radio-group { display: grid; grid-template-rows: auto; gap: 0; }
+vaadin-grid-cell-content .badge { transform: translateY(-2px); }
+.badge.active.selected { background: #dbefe4; }
+.employee-app vaadin-radio-group { grid-template-rows: 0 0 auto 0 0; }
+.employee-app vaadin-radio-group::part(group-field) { transform: translateY(-4.5px); }
+.employee-app vaadin-radio-button > label { transform: translateY(-4.5px); }
+
+.nav-item vaadin-icon { width: 20px; height: 20px; margin: 2px; }
+.account > .account-chevron { width: 16px; height: 16px; color: #a7bfce; }
+.field :is(vaadin-select,vaadin-date-picker)::part(toggle-button) { color: #778a96; }
+/* Icon's public host must retain its flex layout so shadow SVGs stay centered. */
+vaadin-icon.icon { display: inline-flex; }
+vaadin-grid { --vaadin-grid-cell-text-overflow: clip; }

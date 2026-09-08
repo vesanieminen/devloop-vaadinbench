@@ -10,7 +10,7 @@ import java.util.*;
 /** Runs the real visual evaluator on the served Flow app with disclosed CSS mutations. */
 public final class CalibrationRunner {
     public static void main(String[] args) throws Exception {
-        if (args.length < 3) throw new IllegalArgumentException("URL OUTPUT CASES_JSON [calibration|holdout|baseline]");
+        if (args.length < 3) throw new IllegalArgumentException("URL OUTPUT CASES_JSON [baseline|calibration|regression|holdout-v2]");
         String url = args[0], split = args.length > 3 ? args[3] : "baseline";
         Path output = Path.of(args[1]); Files.createDirectories(output);
         JsonArray cases = JsonParser.parseString(Files.readString(Path.of(args[2]))).getAsJsonArray();
@@ -40,7 +40,9 @@ public final class CalibrationRunner {
                         page.getByTestId("employee-table").waitFor();
                         String css = test.get("css").getAsString();
                         if (!css.isBlank()) page.addStyleTag(new Page.AddStyleTagOptions().setContent(css));
-                        var evaluation = VisualEvaluator.evaluate(page, profile, output.resolve(name + "-" + profile));
+                        var evaluation = VisualEvaluator.evaluate(page, profile, output.resolve(name + "-" + profile), state -> {
+                            if(state.equals("open") && test.has("script")) page.evaluate("() => {"+test.get("script").getAsString()+"}");
+                        });
                         boolean passed = evaluation.passed() && errors.isEmpty();
                         boolean expected = test.getAsJsonObject("expected").get(profile).getAsBoolean();
                         Map<String, Object> row = new LinkedHashMap<>();

@@ -7,100 +7,18 @@
     "sha256": "36643644f318a812aab2d2ed3bb98f8cf0872527f835fe9398d95fe6b9adb878",
     "inference": "Best match among Open Sans, Inter, Roboto, Source Sans 3 at the measured text size; original font metadata was not provided."
   },
-  "icons": {
+  "brand": {
     "source": "employee-list.png",
     "coordinates": "native 2880x2048 pixels",
-    "crops": {
-      "acme": [
-        48,
-        48,
-        324,
-        160
-      ],
-      "dashboard": [
-        48,
-        224,
-        96,
-        272
-      ],
-      "orders": [
-        48,
-        400,
-        96,
-        448
-      ],
-      "deliveries": [
-        48,
-        480,
-        96,
-        528
-      ],
-      "reports": [
-        48,
-        560,
-        96,
-        608
-      ],
-      "employees": [
-        48,
-        736,
-        96,
-        784
-      ],
-      "utilisation": [
-        48,
-        816,
-        96,
-        864
-      ],
-      "payroll": [
-        48,
-        896,
-        96,
-        944
-      ],
-      "access": [
-        48,
-        1072,
-        96,
-        1120
-      ],
-      "settings": [
-        48,
-        1152,
-        96,
-        1200
-      ],
-      "upload": [
-        2274,
-        228,
-        2322,
-        276
-      ],
-      "plus": [
-        2522,
-        228,
-        2570,
-        276
-      ],
-      "calendar": [
-        2268,
-        1224,
-        2316,
-        1272
-      ],
-      "chevron": [
-        2730,
-        1508,
-        2770,
-        1548
-      ],
-      "account-chevron": [
-        480,
-        1948,
-        512,
-        1980
-      ]
-    }
+    "crop": [
+      48,
+      48,
+      324,
+      160
+    ]
+  },
+  "icons": {
+    "source": "VaadinIcon enum from pinned Vaadin libraries",
+    "note": "General UI icons use Vaadin components; Select and DatePicker use their built-in affordances."
   }
 }

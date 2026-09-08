@@ -29,8 +29,18 @@ public class EmployeesView extends Div {
     public EmployeesView() {
         addClassName("employee-app");
         content.addClassName("main-content");
-        content.add(Ui.html("<div class='tabs' data-testid='tabs'><span data-testid='tab-employees' aria-selected='true'>Employee List</span><span>Organization Chart</span></div>"));
-        content.add(Ui.html("<div class='summary' data-testid='summary'><div class='metric'><span class='metric-label'>Total employees</span><strong data-testid='total-value'>246</strong><small><em>+14</em> this year</small></div><div class='metric'><span class='metric-label'>Logistics employees</span><strong data-testid='logistics-value'>192</strong><small>78% of all</small></div><div class='summary-actions'><button data-testid='export'>"+Ui.icon("upload")+"<span>Export</span></button><button class='primary' data-testid='add-employee'>"+Ui.icon("plus")+"<span>Add employee</span></button></div></div>"));
+        var employeeTab=new com.vaadin.flow.component.tabs.Tab("Employee List");
+        employeeTab.getElement().setAttribute("data-testid", "tab-employees");
+        var tabs=new com.vaadin.flow.component.tabs.Tabs(employeeTab,new com.vaadin.flow.component.tabs.Tab("Organization Chart"));
+        tabs.addClassName("tabs"); tabs.getElement().setAttribute("data-testid","tabs"); content.add(tabs);
+        Div summary=new Div(); summary.addClassName("summary"); summary.getElement().setAttribute("data-testid","summary");
+        summary.add(Ui.html("<div class='metric'><span class='metric-label'>Total employees</span><strong data-testid='total-value'>246</strong><small><em>+14</em> this year</small></div>"),
+            Ui.html("<div class='metric'><span class='metric-label'>Logistics employees</span><strong data-testid='logistics-value'>192</strong><small>78% of all</small></div>"));
+        var export=new com.vaadin.flow.component.button.Button("Export",Ui.icon("upload"));
+        export.getElement().setAttribute("data-testid","export");
+        var addEmployee=new com.vaadin.flow.component.button.Button("Add employee",Ui.icon("plus")); addEmployee.addClassName("primary");
+        addEmployee.getElement().setAttribute("data-testid","add-employee");
+        Div actions=new Div(export,addEmployee); actions.addClassName("summary-actions"); summary.add(actions); content.add(summary);
         workspace.addClassName("workspace");
         table=new EmployeeTable(rows,null,this::select);
         workspace.add(table); content.add(workspace); add(new AppShell(content));

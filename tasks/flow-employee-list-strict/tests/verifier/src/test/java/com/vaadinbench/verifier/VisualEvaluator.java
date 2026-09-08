@@ -25,6 +25,9 @@ public final class VisualEvaluator {
     }
 
     public static Evaluation evaluate(Page page, String profile, Path output) throws IOException {
+        return evaluate(page,profile,output,state -> {});
+    }
+    static Evaluation evaluate(Page page, String profile, Path output, java.util.function.Consumer<String> beforeState) throws IOException {
         Files.createDirectories(output);
         DesignContract contract = new DesignContract(profile);
         List<DesignContract.Measurement> design = new ArrayList<>();
@@ -32,10 +35,12 @@ public final class VisualEvaluator {
         List<String> failures = new ArrayList<>();
         for (String state : List.of("plain", "open")) {
             if (state.equals("open")) {
-                page.locator("[data-row-id='e02']").click();
+                BrowserElements.row(page, "e02").click();
                 page.getByTestId("employee-detail").waitFor();
             }
+            beforeState.accept(state);
             settle(page);
+            failures.addAll(ComponentContract.validate(page,state));
             String name = state.equals("plain") ? "employee-list-plain" : "employee-list";
             List<DesignContract.Measurement> measured = contract.measure(page, state);
             design.addAll(measured);
@@ -72,9 +77,9 @@ public final class VisualEvaluator {
                 double ssim = StructuralSimilarity.compare(expected, actual, region);
                 // Keep literal RGB agreement for diagnostics, not the verdict.
                 double pixels = exactAgreement(expected, actual, region);
-                boolean passed = ssim >= contract.minimumSsim();
-                visual.add(new VisualMeasurement(state, region.name(), ssim, contract.minimumSsim(), pixels, passed));
-                if (!passed) failures.add(state + "/" + region.name() + ": SSIM " + ssim + " < " + contract.minimumSsim());
+                boolean passed = ssim >= contract.minimumSsim(region.name());
+                visual.add(new VisualMeasurement(state, region.name(), ssim, contract.minimumSsim(region.name()), pixels, passed));
+                if (!passed) failures.add(state + "/" + region.name() + ": SSIM " + ssim + " < " + contract.minimumSsim(region.name()));
             }
         }
         Evaluation result = new Evaluation(profile, design, visual, failures);
