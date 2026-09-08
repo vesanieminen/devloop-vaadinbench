@@ -24,7 +24,7 @@ public final class StructuralSimilarityControls {
             }
             a.setRGB(x,y,original);b.setRGB(x,y,changed);
         }
-        var full=new PixelComparison.Region("all",0,0,31,27);
+        var full=new StructuralSimilarity.Region("all",0,0,31,27);
         near(1, StructuralSimilarity.compare(a,a,full), "Identity");
         // skimage.metrics.structural_similarity(a,b,win_size=11,data_range=255,
         // channel_axis=-1,gaussian_weights=False,use_sample_covariance=True)
@@ -32,13 +32,13 @@ public final class StructuralSimilarityControls {
         near(StructuralSimilarity.compare(a,b,full), StructuralSimilarity.compare(b,a,full), "Symmetry");
         var black=solid(31,27,0); var white=solid(31,27,0xffffff);
         near(6.5025/(255.0*255+6.5025), StructuralSimilarity.compare(black,white,full), "Constant black/white luminance");
-        near(1, StructuralSimilarity.compare(black,black,new PixelComparison.Region("minimum",1,1,11,11)), "Minimum window");
+        near(1, StructuralSimilarity.compare(black,black,new StructuralSimilarity.Region("minimum",1,1,11,11)), "Minimum window");
         boolean refused=false;
-        try {StructuralSimilarity.compare(a,b,new PixelComparison.Region("small",0,0,10,11));}
+        try {StructuralSimilarity.compare(a,b,new StructuralSimilarity.Region("small",0,0,10,11));}
         catch(IllegalArgumentException expected){refused=true;}
         if(!refused)throw new AssertionError("Too-small region accepted");
         refused=false;
-        try {StructuralSimilarity.compare(a,white,new PixelComparison.Region("bounds",30,0,11,11));}
+        try {StructuralSimilarity.compare(a,white,new StructuralSimilarity.Region("bounds",30,0,11,11));}
         catch(IllegalArgumentException expected){refused=true;}
         if(!refused)throw new AssertionError("Out-of-bounds region accepted");
         refused=false;

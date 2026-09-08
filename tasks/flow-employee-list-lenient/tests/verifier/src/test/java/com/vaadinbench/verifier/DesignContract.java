@@ -25,16 +25,13 @@ public final class DesignContract {
         profile = selected.getAsJsonObject();
     }
 
-    public double minimumSsim(String region) {
-        JsonObject overrides=profile.getAsJsonObject("ssimRegionMinimum");
-        return overrides!=null && overrides.has(region) ? overrides.get(region).getAsDouble() : profile.get("ssimMinimum").getAsDouble();
-    }
+    public double minimumSsim() { return profile.get("ssimMinimum").getAsDouble(); }
 
-    public List<PixelComparison.Region> regions(String state) {
-        List<PixelComparison.Region> result = new ArrayList<>();
+    public List<StructuralSimilarity.Region> regions(String state) {
+        List<StructuralSimilarity.Region> result = new ArrayList<>();
         for (JsonElement entry : root.getAsJsonObject("visual").getAsJsonObject("regions").getAsJsonArray(state)) {
             JsonArray r = entry.getAsJsonArray();
-            result.add(new PixelComparison.Region(r.get(0).getAsString(), r.get(1).getAsInt(),
+            result.add(new StructuralSimilarity.Region(r.get(0).getAsString(), r.get(1).getAsInt(),
                     r.get(2).getAsInt(), r.get(3).getAsInt(), r.get(4).getAsInt()));
         }
         return result;

@@ -10,6 +10,7 @@ import java.awt.image.BufferedImage;
  * Sliding moments bound working memory; there is no resizing or image registration.
  */
 public final class StructuralSimilarity {
+    public record Region(String name, int x, int y, int width, int height) {}
     private static final int WINDOW = 11;
     private static final double N = WINDOW * WINDOW;
     private static final double C1 = 6.5025;
@@ -22,7 +23,7 @@ public final class StructuralSimilarity {
         previous[moment][column] = value;
     }
 
-    public static double compare(BufferedImage reference, BufferedImage actual, PixelComparison.Region region) {
+    public static double compare(BufferedImage reference, BufferedImage actual, StructuralSimilarity.Region region) {
         if (reference == null || actual == null
                 || reference.getWidth() != actual.getWidth() || reference.getHeight() != actual.getHeight())
             throw new IllegalArgumentException("Missing image or mismatched dimensions");

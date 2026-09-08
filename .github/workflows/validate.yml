@@ -26,7 +26,7 @@ jobs:
           bash scripts/test-vaadin-bench.sh
           uv run python scripts/test-devloop.py
 
-      - name: Employee-list pixel metrics and variant isolation
+      - name: Employee-list SSIM controls and variant isolation
         run: bash scripts/test-employee-list.sh
 
       # What a task promises about the boundary lives in its task.toml, and the

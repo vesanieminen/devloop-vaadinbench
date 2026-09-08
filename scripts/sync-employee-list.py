@@ -29,7 +29,7 @@ def strict_files():
             del result[path]
     for path, data in files(SOURCE / 'environment/design').items():
         result[Path('tests/agent-design') / path] = data
-        if len(path.parts) == 1:
+        if path.name in {'design-contract.json', 'employee-list.png', 'employee-list-plain.png'}:
             result[Path('tests/verifier/src/test/resources/design') / path] = data
     fixture = json.loads(result[Path('environment/design/fixture.json')])
     rows = '\n'.join('\t'.join([r['id'], r['name'], r['department'], r['jobTitle'],
