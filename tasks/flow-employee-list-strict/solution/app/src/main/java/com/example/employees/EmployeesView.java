@@ -39,7 +39,7 @@ public class EmployeesView extends Div {
             Ui.html("<div class='metric'><span class='metric-label'>Logistics employees</span><strong data-testid='logistics-value'>192</strong><small>78% of all</small></div>"));
         var export=new com.vaadin.flow.component.button.Button("Export",Ui.icon("upload"));
         export.getElement().setAttribute("data-testid","export");
-        var addEmployee=new com.vaadin.flow.component.button.Button("Add employee",Ui.icon("plus")); addEmployee.addClassName("primary");
+        var addEmployee=new com.vaadin.flow.component.button.Button("Add employee",Ui.icon("plus")); addEmployee.addClassName("primary"); addEmployee.addThemeVariants(com.vaadin.flow.component.button.ButtonVariant.PRIMARY);
         addEmployee.getElement().setAttribute("data-testid","add-employee");
         Div actions=new Div(export,addEmployee); actions.addClassName("summary-actions"); summary.add(actions); content.add(summary);
         workspace.getElement().getClassList().add("workspace");

@@ -8,6 +8,7 @@ final class ComponentContract {
         List<String> failures=new ArrayList<>();
         Map<String,String> expected=new LinkedHashMap<>();
         expected.put("master-detail","vaadin-master-detail-layout");
+        expected.put("nav-employees","vaadin-side-nav-item"); expected.put("account-avatar","vaadin-avatar");
         expected.put("employee-grid","vaadin-grid"); expected.put("tabs","vaadin-tabs");
         expected.put("tab-employees","vaadin-tab"); expected.put("export","vaadin-button");expected.put("add-employee","vaadin-button");
         if(state.equals("open")) {

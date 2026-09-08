@@ -1,6 +1,6 @@
 #!/bin/bash
 # Run authoring controls against an already served, compiled reference application.
-# Usage: calibrate-employee-list.sh APP_DIR URL OUTPUT [baseline|calibration|regression|holdout-v2]
+# Usage: calibrate-employee-list.sh APP_DIR URL OUTPUT [all|baseline|calibration|regression|holdout-v2]
 set -euo pipefail
 ROOT=$(cd "$(dirname "$0")/.." && pwd)
 APP_DIR=$(cd "${1:?APP_DIR required}" && pwd)

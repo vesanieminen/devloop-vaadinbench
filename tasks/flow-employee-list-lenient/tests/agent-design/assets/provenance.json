@@ -1,25 +1,18 @@
 {
   "font": {
-    "family": "Open Sans",
+    "family": "Noto Sans",
     "upstream": "https://github.com/google/fonts",
     "commit": "5e35378e6bda803962ee6fd257e444a7d459660d",
-    "path": "ofl/opensans/OpenSans[wdth,wght].ttf",
-    "sha256": "36643644f318a812aab2d2ed3bb98f8cf0872527f835fe9398d95fe6b9adb878",
-    "inference": "Best match among Open Sans, Inter, Roboto, Source Sans 3 at the measured text size; original font metadata was not provided.",
-    "figmaCrossCheck": "The later-supplied live Figma frame 6377:6991 uses Noto Sans and differs in button colors from the frozen PNG exports. Direct Noto Sans substitution lowered the original open-table SSIM to 0.937568; Open Sans remains the calibrated font for those PNGs. See docs/employee-list/evidence/figma-audit.json."
+    "path": "ofl/notosans/NotoSans[wdth,wght].ttf",
+    "sha256": "bfb7bb691513f12e734dc346c03a03f784912432d7e3fa8e56efcf906fe86b3d",
+    "source": "Figma text node fontName: Noto Sans; weights 400, 500 and 600."
   },
   "brand": {
-    "source": "employee-list.png",
-    "coordinates": "native 2880x2048 pixels",
-    "crop": [
-      48,
-      48,
-      324,
-      160
-    ]
+    "source": "Figma file 101wCrY8D6osNDjIMcLcSP, node 8686:1720",
+    "export": "PNG, SCALE 2; 276\u00d7112 pixels"
   },
   "icons": {
     "source": "VaadinIcon enum from pinned Vaadin libraries",
-    "note": "General UI icons use Vaadin components; Select and DatePicker use their built-in affordances."
+    "note": "Standard UI symbols use Vaadin components; Select and DatePicker retain built-in affordances."
   }
 }

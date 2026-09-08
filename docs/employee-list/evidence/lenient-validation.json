@@ -1,0 +1,17 @@
+{
+  "profile": "lenient",
+  "browser": "147.0.7727.15\n1440x1024 CSS; deviceScaleFactor=2; en-GB; UTC; light; reduced-motion",
+  "platform": "macOS arm64",
+  "junit": {
+    "tests": 6,
+    "failures": 0,
+    "errors": 0
+  },
+  "designMeasurements": 419,
+  "visualRegions": 16,
+  "failures": [],
+  "masters": {
+    "employee-list.png": "dc600e156cae30f9742d05eb0375ea1cdfdd12d7b9474b2c25151a3d1c6b17b9",
+    "employee-list-plain.png": "7da60258f75c22499d7656e45556acc59cbbda3db8db35100d1ab6a6e07d00a4"
+  }
+}

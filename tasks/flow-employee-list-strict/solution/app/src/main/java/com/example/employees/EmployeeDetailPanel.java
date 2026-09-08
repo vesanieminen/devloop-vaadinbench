@@ -6,6 +6,8 @@ import com.vaadin.flow.component.HasAriaLabel;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.component.textfield.EmailField;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
@@ -22,7 +24,8 @@ public class EmployeeDetailPanel extends Div {
         FormLayout personal = section("form-personal");
         personal.add(text("first-name", "First name", employee.firstName()), text("last-name", "Last name", employee.lastName()));
         personal.add(text("phone", "Phone", "+91 555 1213 456"), 2);
-        personal.add(text("email", "Email", "liam.johnson@example.com"), 2);
+        EmailField email = new EmailField(); email.setValue("liam.johnson@example.com"); email.setManualValidation(true);
+        personal.add(field("email", "Email", email), 2);
         DatePicker dob = new DatePicker(); dob.setValue(LocalDate.of(1972,6,22));
         dob.setI18n(new DatePicker.DatePickerI18n().setDateFormat("dd/MM/yyyy")); dob.setManualValidation(true);
         personal.add(field("dob", "Date of Birth", dob), 2); body.add(personal);
@@ -40,7 +43,10 @@ public class EmployeeDetailPanel extends Div {
         add(body, footer);
     }
     private static Button action(String label, String style, Runnable callback) {
-        Button button = new Button(label, e -> callback.run()); button.addClassName(style); return button;
+        Button button = new Button(label, e -> callback.run()); button.addClassName(style);
+        if (style.equals("primary")) button.addThemeVariants(ButtonVariant.PRIMARY);
+        if (style.equals("remove")) button.addThemeVariants(ButtonVariant.ERROR);
+        return button;
     }
     private static FormLayout section(String hook) {
         FormLayout form = new FormLayout();
