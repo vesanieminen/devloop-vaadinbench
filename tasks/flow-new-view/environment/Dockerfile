@@ -10,7 +10,7 @@
 # The image below is pulled from GHCR, named by the digest the base-image
 # workflow writes here. Why a digest and not the version tag, and how to point it
 # at an image you built yourself: README, "Adding a task".
-ARG BASE_IMAGE=ghcr.io/vesanieminen/devloop-vaadinbench-agents:25.3.0-alpha8-flow-25.3-snapshot-jdk25
+ARG BASE_IMAGE=vaadinbench-agents:local
 FROM ${BASE_IMAGE}
 
 # The app is the upstream project at a pinned commit, not a copy vendored into
