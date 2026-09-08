@@ -10,6 +10,7 @@ final class Ui {
     static String escape(String value) { return value.replace("&", "&amp;").replace("<", "&lt;").replace("'", "&#39;"); }
     static Icon icon(String name) {
         VaadinIcon symbol=switch(name) {
+            case "menu" -> VaadinIcon.MENU;
             case "dashboard" -> VaadinIcon.HOME_O;
             case "orders" -> VaadinIcon.CLIPBOARD_CHECK;
             case "deliveries" -> VaadinIcon.TRUCK;

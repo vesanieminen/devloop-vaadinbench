@@ -31,7 +31,7 @@ public class AppShell extends Div {
         Div account=new Div(Ui.html("<span class='avatar'>FL</span>"),new com.vaadin.flow.component.html.Span("Firstname Lastname"));
         account.addClassName("account"); account.getElement().setAttribute("data-testid","account");
         var chevron=Ui.icon("account-chevron"); chevron.addClassName("account-chevron"); account.add(chevron); sidebar.add(account);
-        var toggle = new com.vaadin.flow.component.button.Button("☰");
+        var toggle = new com.vaadin.flow.component.button.Button(Ui.icon("menu"));
         toggle.addClassName("menu-toggle"); toggle.setAriaLabel("Menu");
         toggle.getElement().setAttribute("data-testid", "menu-toggle"); toggle.getElement().setAttribute("aria-expanded", "false");
         toggle.getElement().addEventListener("click", event -> {

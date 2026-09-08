@@ -95,11 +95,13 @@ class EmployeeListBrowserVerifierTest {
                 "Visible initialized Vaadin component required: " + tags);
     }
     @Test void appropriateVaadinComponentsAreUsed() {
+        component(id("master-detail"), "vaadin-master-detail-layout");
         component(id("employee-grid"), "vaadin-grid");
         component(id("tabs"), "vaadin-tabs");
         component(id("tab-employees"), "vaadin-tab");
         component(id("export"), "vaadin-button"); component(id("add-employee"), "vaadin-button");
         select("e02");
+        component(id("form-personal"), "vaadin-form-layout"); component(id("form-role"), "vaadin-form-layout");
         for(String key : List.of("first-name","last-name","phone")) component(field(key), "vaadin-text-field");
         component(field("email"), "vaadin-text-field,vaadin-email-field");
         component(field("dob"), "vaadin-date-picker");
@@ -108,9 +110,11 @@ class EmployeeListBrowserVerifierTest {
         assertThat(id("field-status").locator("vaadin-radio-button")).hasCount(3);
         for(String action : List.of("Remove","Cancel","Save changes"))
             component(id("employee-detail").getByRole(AriaRole.BUTTON,new Locator.GetByRoleOptions().setName(action).setExact(true)), "vaadin-button");
-        field("department").click();
-        assertThat(page.getByRole(AriaRole.OPTION,new Page.GetByRoleOptions().setName("Deliveries").setExact(true))).isVisible();
-        page.keyboard().press("Escape");
+        for (String key : List.of("department", "job-title")) {
+            String value = selectionValue(key); field(key).click();
+            assertThat(page.getByRole(AriaRole.OPTION,new Page.GetByRoleOptions().setName(value).setExact(true))).isVisible();
+            page.keyboard().press("Escape");
+        }
         field("dob").locator("[part~=toggle-button]").click();
         assertThat(page.locator("vaadin-date-picker-overlay")).isVisible();
         page.keyboard().press("Escape");
@@ -160,7 +164,7 @@ class EmployeeListBrowserVerifierTest {
         assertEquals("Deliveries",selectionValue("department"));
         assertEquals("Logistics handler",selectionValue("job-title"));
         for (String key : List.of("department","job-title"))
-            assertTrue((Boolean)field(key).evaluate("e => e.matches('select,vaadin-select,vaadin-combo-box')"),"Real select: "+key);
+            assertTrue((Boolean)field(key).evaluate("e => e.matches('vaadin-select,vaadin-combo-box')"),"Real select: "+key);
         assertThat(id("employee-detail").getByRole(AriaRole.RADIO)).hasCount(3);
         assertThat(id("employee-detail").getByRole(AriaRole.RADIO,new Locator.GetByRoleOptions().setName("Active").setExact(true))).isChecked();
         for (String label : List.of("On leave","Inactive"))
@@ -225,7 +229,9 @@ class EmployeeListBrowserVerifierTest {
             page.setViewportSize(width,800); settle(); page.waitForFunction("() => !document.querySelector('vaadin-grid').loading"); noOverflow(); importantCellsFit();
             if (width < 768) {
                 assertThat(id("sidebar")).isHidden();
-                assertThat(id("menu-toggle")).isVisible();
+                component(id("menu-toggle"), "vaadin-button");
+                component(id("icon-menu"), "vaadin-icon");
+                assertThat(id("icon-menu")).hasAttribute("icon", "vaadin:menu");
                 id("menu-toggle").click(); assertThat(id("sidebar")).isVisible(); noOverflow();
                 id("menu-toggle").click(); assertThat(id("sidebar")).isHidden();
             } else { assertThat(id("sidebar")).isVisible(); near(0,box(id("sidebar")).x); near(800,box(id("sidebar")).height); }
@@ -250,7 +256,7 @@ class EmployeeListBrowserVerifierTest {
                 near(0,panel.x); near(width,panel.width);
                 assertTrue(box(field("last-name")).y >= box(field("first-name")).y+box(field("first-name")).height,"Names stack");
                 assertTrue(box(field("job-title")).y >= box(field("department")).y+box(field("department")).height,"Role fields stack");
-                assertTrue((Boolean)id("employee-detail").evaluate("e => ['fixed','absolute'].includes(getComputedStyle(e).position) || !!e.closest('[role=dialog],dialog,vaadin-dialog-overlay')"),"Overlay wrapper");
+                assertTrue((Boolean)id("employee-detail").evaluate("e => ['fixed','absolute'].includes(getComputedStyle(e).position) || !!e.closest('[role=dialog],dialog,vaadin-dialog-overlay,vaadin-master-detail-layout[overlay][overlay-containment=page]')"),"Overlay wrapper");
                 if (width>=768) assertThat(id("sidebar")).isVisible();
             }
             for (String action : List.of("Remove","Cancel","Save changes")) {

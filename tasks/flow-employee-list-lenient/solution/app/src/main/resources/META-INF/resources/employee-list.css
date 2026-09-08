@@ -271,3 +271,14 @@ vaadin-grid-cell-content .badge { transform: translateY(-2px); }
 /* Icon's public host must retain its flex layout so shadow SVGs stay centered. */
 vaadin-icon.icon { display: inline-flex; }
 vaadin-grid { --vaadin-grid-cell-text-overflow: clip; }
+
+/* Vaadin layout components own the split, overlay and field columns. */
+vaadin-master-detail-layout.workspace { display: grid; --aura-master-detail-layout-detail-inset: 0px; --vaadin-master-detail-layout-border-width: 0px; --vaadin-master-detail-layout-detail-background: transparent; --vaadin-master-detail-layout-detail-shadow: none; }
+vaadin-master-detail-layout::part(master), vaadin-master-detail-layout::part(detail) { min-width: 0; }
+.workspace .table-region { width: 100%; height: 100%; }
+vaadin-master-detail-layout .detail { height: calc(100% - 24px); width: calc(100% - 48px); flex: none; }
+vaadin-form-layout.role { display: block; }
+vaadin-form-layout > .dob { width: 264px !important; max-width: 100%; }
+@media(max-width:1399px) { vaadin-master-detail-layout .detail { width: calc(100% - 24px); } }
+@media(max-width:1023px) { vaadin-master-detail-layout .detail { position: static; width: 100%; height: 100%; margin: 0; } }
+@media(max-width:767px) { vaadin-form-layout > .dob { width: 100% !important; } }

@@ -3825,9 +3825,9 @@
     {
       "state": "open",
       "region": "whole",
-      "ssim": 0.9670053423971248,
+      "ssim": 0.9670077119232754,
       "minimum": 0.95,
-      "exactPixelAgreement": 0.9572424994574653,
+      "exactPixelAgreement": 0.957417466905382,
       "passed": true
     },
     {
@@ -3849,9 +3849,9 @@
     {
       "state": "open",
       "region": "summary",
-      "ssim": 0.9521019138800999,
+      "ssim": 0.9521043041258288,
       "minimum": 0.95,
-      "exactPixelAgreement": 0.9630637464746172,
+      "exactPixelAgreement": 0.964675350020145,
       "passed": true
     },
     {
@@ -3865,33 +3865,33 @@
     {
       "state": "open",
       "region": "panel-header",
-      "ssim": 0.9767718553723308,
+      "ssim": 0.976772916424189,
       "minimum": 0.95,
-      "exactPixelAgreement": 0.9689011539524599,
+      "exactPixelAgreement": 0.968914110005528,
       "passed": true
     },
     {
       "state": "open",
       "region": "panel-fields",
-      "ssim": 0.9815336341103723,
+      "ssim": 0.981533719844715,
       "minimum": 0.95,
-      "exactPixelAgreement": 0.9480811335882571,
+      "exactPixelAgreement": 0.9480837033839069,
       "passed": true
     },
     {
       "state": "open",
       "region": "panel-role",
-      "ssim": 0.9598327483611709,
+      "ssim": 0.9598478252802702,
       "minimum": 0.95,
-      "exactPixelAgreement": 0.9573555562033582,
+      "exactPixelAgreement": 0.9573573781483209,
       "passed": true
     },
     {
       "state": "open",
       "region": "panel-footer",
-      "ssim": 0.9790235735293316,
+      "ssim": 0.9790234284405164,
       "minimum": 0.95,
-      "exactPixelAgreement": 0.9410778386548271,
+      "exactPixelAgreement": 0.941089646703193,
       "passed": true
     },
     {
