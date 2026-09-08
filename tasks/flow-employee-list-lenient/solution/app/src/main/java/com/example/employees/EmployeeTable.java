@@ -13,11 +13,14 @@ public class EmployeeTable extends Div {
         head.appendChild(hr);table.appendChild(head,body);getElement().appendChild(table);
         for(Employee row:rows) {
             Element tr=new Element("tr");tr.setAttribute("data-row-id",row.id());tr.setAttribute("aria-selected","false");
-            for(String value:List.of(row.name(),row.department(),row.jobTitle()))tr.appendChild(new Element("td").setText(value));
-            Element status=new Element("td");status.appendChild(new StatusBadge(row.status()).getElement());tr.appendChild(status,new Element("td").setText(row.startDate()));
+            for(String value:List.of(row.name(),row.department(),row.jobTitle()))tr.appendChild(cell(value));
+            Element status=new Element("td");status.appendChild(new StatusBadge(row.status()).getElement());tr.appendChild(status,cell(row.startDate()));
             tr.addEventListener("click",e->onSelectRow.accept(row));body.appendChild(tr);rowElements.put(row.id(),tr);
         }
         select(selectedId);
+    }
+    private static Element cell(String value) {
+        Element td=new Element("td"); td.appendChild(new Element("span").setAttribute("class","cell-text").setText(value)); return td;
     }
     public void select(String id) {rowElements.forEach((key,row)->row.setAttribute("aria-selected",String.valueOf(key.equals(id))));}
 }

@@ -38,6 +38,6 @@ RUN git clone -q https://github.com/vesanieminen/start.vaadin.plain /tests/basel
     && rm -rf /tests/baseline/.git \
     && cp /tests/protected/pom.xml /tests/baseline/pom.xml
 
-COPY verifier/src/test/resources/design/employee-list.png verifier/src/test/resources/design/employee-list-plain.png verifier/src/test/resources/design/fixture.json /tests/baseline/design/
+COPY agent-design /tests/baseline/design
 
 WORKDIR /app
