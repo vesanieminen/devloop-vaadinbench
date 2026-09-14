@@ -27,7 +27,7 @@
 #
 # The base below is the digest the base-image workflow wrote when it last
 # published; the workflow rebuilds this image on top of the base it has just built.
-ARG BASE_IMAGE=ghcr.io/vesanieminen/devloop-vaadinbench-base@sha256:11dd2f88cf778bb5526f50733b95960c96d017c8b2e60e323af6f5f3d21fa56c
+ARG BASE_IMAGE=ghcr.io/vesanieminen/devloop-vaadinbench-base@sha256:b2c40176c69b292eba693184c2711360b51dfb482453196dffd0d71bfbffb98d
 FROM ${BASE_IMAGE}
 
 # Claude Code runs with background tasks enabled and may shell out to `ps`. The
