@@ -63,6 +63,11 @@ class Lifecycle(unittest.TestCase):
         self.run_app('status', 1)
         self.assertTrue((self.root / 'app.log').exists())
 
+    def test_missing_route_is_still_a_ready_server(self):
+        (self.root / 'employees').unlink()
+        self.assertIn('/employees returns HTTP 404', self.run_app('start').stdout)
+        self.run_app('status')
+
     def test_unmanaged_port_is_not_killed(self):
         with socket.socket() as s:
             s.bind(('127.0.0.1', self.port))

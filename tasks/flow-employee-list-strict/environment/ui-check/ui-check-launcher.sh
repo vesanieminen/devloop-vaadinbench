@@ -200,11 +200,12 @@ if ! command -v flock >/dev/null; then exec "${JAVA[@]}" "$@"; fi
 exec 8>"$RUN_LOCK"
 flock -x 8
 start_daemon
-payload=$(jq -cn --args '$ARGS.positional' -- "$@")
+payload=$(jq -cn --arg cwd "$PWD" --args \
+    '{action:"run",cwd:$cwd,args:$ARGS.positional}' -- "$@")
 response=$(curl --silent --show-error --fail --unix-socket "$SOCKET" \
     --connect-timeout 2 --max-time 180 \
     -H "X-Ui-Check-Token: $DAEMON_TOKEN" -H 'Content-Type: application/json' \
-    --data "{\"action\":\"run\",\"args\":$payload}" http://localhost/) || {
+    --data "$payload" http://localhost/) || {
     # Do not retry after curl has attempted a request: the checker may already
     # have created its output directory. The next command detects stale state.
     echo "ui-check: persistent checker failed; retry after inspecting $LOG" >&2

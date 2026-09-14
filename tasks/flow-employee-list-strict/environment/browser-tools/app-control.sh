@@ -83,8 +83,8 @@ start_app() {
             running || break
             code=$(curl --noproxy '*' -s -o /dev/null -w '%{http_code}' --max-time 1 \
                 "http://127.0.0.1:$PORT/employees") || code=000
-            if [[ $code == 200 ]] && running; then
-                echo "Application ready: http://localhost:$PORT/employees (PID $pid)"
+            if [[ $code != 000 ]] && running; then
+                echo "Application ready on port $PORT; /employees returns HTTP $code (PID $pid)"
                 echo "Log: $LOG"
                 return
             fi
