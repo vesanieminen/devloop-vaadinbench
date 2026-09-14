@@ -44,11 +44,17 @@ def main():
                                        env=dict(os.environ, PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD='1'))
             try:
                 deadline = time.monotonic() + 30
-                while not Path(endpoint).exists():
+                while True:
                     if process.poll() is not None or time.monotonic() > deadline:
                         raise AssertionError((root / 'daemon.log').read_text())
+                    try:
+                        if request({'action': 'ping'})['exitCode'] == 0:
+                            break
+                    except (FileNotFoundError, ConnectionRefusedError):
+                        # bind creates the filesystem entry before the socket
+                        # necessarily starts accepting connections.
+                        pass
                     time.sleep(.05)
-                assert request({'action': 'ping'})['exitCode'] == 0
                 # The peer is gone before the server can finish reading/responding.
                 with connect() as client:
                     client.sendall(b'POST / HTTP/1.1\r\n')
