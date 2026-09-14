@@ -9,6 +9,7 @@ ZOMBIE_PARENT_PID=
 trap '[[ -z "$BUSY_PID" ]] || kill "$BUSY_PID" 2>/dev/null || true; [[ -z "$ZOMBIE_PARENT_PID" ]] || kill "$ZOMBIE_PARENT_PID" 2>/dev/null || true; rm -rf "$WORK"' EXIT
 cd "$ROOT"
 python3 scripts/sync-employee-list.py --check
+python3 scripts/employee-list/test-result-summary.py
 python3 scripts/employee-list/test-sync.py
 python3 scripts/employee-list/test-app-control.py
 mkdir -p "$WORK/tool" "$WORK/bin"
