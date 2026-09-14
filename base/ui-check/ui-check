@@ -13,8 +13,11 @@ while [[ -L "$SOURCE" ]]; do
     [[ $SOURCE = /* ]] || SOURCE="$SOURCE_DIR/$SOURCE"
 done
 TOOL_DIR=$(cd "$(dirname "$SOURCE")" && pwd)
-CLASSPATH="$TOOL_DIR/ui-check.jar:$(cat "$TOOL_DIR/classpath.txt")"
-PROFILE=$(tr -d '[:space:]' < "$TOOL_DIR/profile.txt")
+CLASSPATH="$TOOL_DIR/ui-check.jar:$TOOL_DIR/lib/*"
+# Each task installs its own profile next to the shared tool. Before that, and
+# for --help, the tool still has to run, so an absent profile is not fatal.
+PROFILE=
+if [[ -r "$TOOL_DIR/profile.txt" ]]; then PROFILE=$(tr -d '[:space:]' < "$TOOL_DIR/profile.txt"); fi
 TOOL_KEY=$(printf '%s' "$TOOL_DIR:$PROFILE" | cksum | awk '{print $1}')
 STATE=${VB_UI_CHECK_STATE:-"/tmp/vaadinbench-ui-check-$TOOL_KEY"}
 SOCKET="$STATE/socket"
