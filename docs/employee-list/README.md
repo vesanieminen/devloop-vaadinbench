@@ -343,6 +343,11 @@ python3 scripts/employee-list/benchmark-ui-check.py \
   /path/to/app/design http://localhost:8193/employees /tmp/ui-check-benchmark 3
 ```
 
+The benchmark provisions missing `profile.txt` files beside the resolved checker
+launchers. Fresh builds both use lenient; if one installation already has a profile,
+that profile is used for both. Conflicting or invalid installed profiles are rejected
+before running any checks, and existing profiles are never overwritten.
+
 This alternates full checks, asserts exact visual measurement parity, tests the
 missing-row failure, and compares repeated cold behavior checks against one persistent
 session including its startup. Outputs retain logs, reports, images and `benchmark.json`.
