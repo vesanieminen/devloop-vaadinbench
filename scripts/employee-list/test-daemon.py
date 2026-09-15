@@ -74,6 +74,11 @@ def main():
                 assert request({'action': 'stop'})['exitCode'] == 0
                 assert process.wait(timeout=10) == 0
                 print('Daemon disconnect, incomplete request, caller-relative paths, and shutdown controls passed')
+            except Exception:
+                # Every failure here is about the checker JVM, so report what it
+                # logged rather than only the client-side error.
+                sys.stderr.write((root / 'daemon.log').read_text())
+                raise
             finally:
                 if process.poll() is None:
                     process.terminate()

@@ -341,6 +341,10 @@ jobs:
               case "$name" in
                 flow-employee-list-*)
                   expected_exit=1
+                  # Build-time validation scripts are not installed in the image,
+                  # so the offline controls bring their own copy.
+                  docker cp "$task/environment/browser-tools/smoke-test.sh" \
+                    "$cid:/tmp/browser-tools-smoke-test.sh"
                   if [ "$2" = 1 ]; then
                     expected_exit=0
                     docker cp scripts/employee-list/UiCheckControls.java "$cid:/tmp/UiCheckControls.java"
