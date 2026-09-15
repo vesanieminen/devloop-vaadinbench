@@ -55,7 +55,8 @@ public final class UiCheck {
     record Report(int schemaVersion, String startedAt, String url, String profile, String design,
                   String browser, List<String> requestedGroups, boolean allChecksPassed,
                   String status, double seconds, List<CheckResult> checks, List<String> errors,
-                  List<String> requestedScenarios, Map<String, Double> timings) {}
+                  List<String> requestedScenarios, Map<String, Double> timings,
+                  List<String> warnings) {}
 
     static Options parse(String[] args) throws IOException {
         return parse(args, Path.of("").toAbsolutePath());
@@ -338,11 +339,32 @@ public final class UiCheck {
         }
     }
 
+    static void closeResource(String name, AutoCloseable resource, List<String> warnings) {
+        if (resource == null) return;
+        try { resource.close(); }
+        catch (Exception error) { warnings.add(name + " shutdown: " + message(error)); }
+    }
+
+    private static void discardUnpublishedOutput(Path working) {
+        if (!Files.exists(working)) return; // Successful publication moved this directory.
+        try (var paths = Files.walk(working)) {
+            for (Path path : paths.sorted(Comparator.reverseOrder()).toList()) Files.deleteIfExists(path);
+        } catch (IOException error) {
+            System.err.println("ui-check warning: cannot remove unpublished output " + working + ": " + message(error));
+        }
+    }
+
     static int run(Options options, CheckTimings timings, Browser sharedBrowser) throws IOException {
+        try { return execute(options, timings, sharedBrowser); }
+        finally { discardUnpublishedOutput(options.workingOutput()); }
+    }
+
+    private static int execute(Options options, CheckTimings timings, Browser sharedBrowser) throws IOException {
         long start = System.nanoTime();
         String startedAt = Instant.now().toString(), browserVersion = "unavailable";
         List<CheckResult> results = new ArrayList<>();
         List<String> errors = new ArrayList<>();
+        List<String> warnings = new ArrayList<>();
         Playwright pw = null;
         Browser launched = null;
         try {
@@ -375,9 +397,10 @@ public final class UiCheck {
         } catch (Exception error) { errors.add(message(error)); }
         finally {
             try (var timer = timings.start("browser.shutdown")) {
-                if (launched != null) try { launched.close(); } catch (Exception error) { errors.add(message(error)); }
-                if (pw != null) try { pw.close(); } catch (Exception error) { errors.add(message(error)); }
+                closeResource("Chromium", launched, warnings);
+                closeResource("Playwright", pw, warnings);
             }
+            warnings.forEach(warning -> System.err.println("ui-check warning: " + warning));
         }
         boolean passed = errors.isEmpty() && results.stream().allMatch(r -> Set.of("passed", "skipped").contains(r.status()))
                 && results.size() == CHECKS.size();
@@ -391,7 +414,7 @@ public final class UiCheck {
         }).toList();
         Report report = new Report(2, startedAt, options.url(), options.profile(), options.design().toString(),
                 browserVersion, List.copyOf(options.groups()), passed && options.scenarios().size() == CHECKS.size(),
-                status, seconds(start), publishedResults, errors, List.copyOf(options.scenarios()), timings.snapshot());
+                status, seconds(start), publishedResults, errors, List.copyOf(options.scenarios()), timings.snapshot(), warnings);
         StringBuilder summary = new StringBuilder();
         for (CheckResult result : results) {
             if (result.status().equals("blocked")) summary.append(result.check()).append(": BLOCKED by earlier readiness failure\n");
@@ -418,7 +441,7 @@ public final class UiCheck {
         phases.put("reporting", seconds(reportingStart));
         report = new Report(2, startedAt, options.url(), options.profile(), options.design().toString(),
                 browserVersion, List.copyOf(options.groups()), report.allChecksPassed(), status, seconds(start),
-                publishedResults, errors, List.copyOf(options.scenarios()), phases);
+                publishedResults, errors, List.copyOf(options.scenarios()), phases, warnings);
         Files.writeString(options.workingOutput().resolve("report.json"), new GsonBuilder().setPrettyPrinting().create().toJson(report));
         Files.move(options.workingOutput(), options.output(), StandardCopyOption.ATOMIC_MOVE);
         System.out.println("Timings (seconds; visual phases nested in scenario totals): " + phases);

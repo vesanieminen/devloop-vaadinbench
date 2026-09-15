@@ -23,7 +23,7 @@ mvn -o -B spring-boot:run \
 server_pid=$!
 trap 'kill "$server_pid" 2>/dev/null || true' EXIT
 ready=false
-for ((attempt=0; attempt<90; attempt++)); do
+for ((attempt=0; attempt<120; attempt++)); do
     if curl -fsS http://localhost:8193/employees >/dev/null 2>&1; then ready=true; break; fi
     if ! kill -0 "$server_pid" 2>/dev/null; then break; fi
     sleep 1
