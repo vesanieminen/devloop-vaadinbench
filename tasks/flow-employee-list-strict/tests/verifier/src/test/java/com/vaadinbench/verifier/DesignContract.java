@@ -47,6 +47,7 @@ public final class DesignContract {
                 : page.locator(description.get("selector").getAsString());
         if (description.has("role")) {
             var options = new Locator.GetByRoleOptions();
+            if (description.has("level")) options.setLevel(description.get("level").getAsInt());
             if (description.has("name")) options.setName(description.get("name").getAsString()).setExact(true);
             locator = locator.getByRole(AriaRole.valueOf(description.get("role").getAsString().toUpperCase(Locale.ROOT)), options);
         }
