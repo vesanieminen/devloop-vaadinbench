@@ -24,7 +24,7 @@ records = []
 
 def run(tool, label, target, groups):
     destination = out / label
-    args = ['--url', target, '--design', design, '--profile', 'lenient',
+    args = ['--url', target, '--design', design,
             '--checks', groups, '--output', str(destination)]
     started = time.monotonic()
     with (out / (label + '.log')).open('w') as log:
@@ -68,7 +68,7 @@ finally:
 
 for i in range(repeats):
     run(current, f'cold-behavior-{i}', url, 'behavior')
-requests = [json.dumps(['--url', url, '--design', design, '--profile', 'lenient', '--checks', 'behavior',
+requests = [json.dumps(['--url', url, '--design', design, '--checks', 'behavior',
                        '--output', str(out / f'session-behavior-{i}')]) for i in range(repeats)]
 started = time.monotonic()
 with (out / 'session.log').open('w') as log:

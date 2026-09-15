@@ -16,6 +16,7 @@ def main():
     classpath, design = sys.argv[1], Path(sys.argv[2]).resolve()
     with tempfile.TemporaryDirectory(prefix='ui-daemon-', dir='/tmp') as temporary:
         root = Path(temporary)
+        (root / 'profile.txt').write_text('strict\n')
         endpoint = str(root / 'socket')
         token = 'regression-token'
 
@@ -39,7 +40,7 @@ def main():
                 return response(client)
 
         with (root / 'daemon.log').open('w') as log:
-            process = subprocess.Popen(['java', '-cp', classpath, 'com.vaadinbench.verifier.UiCheck',
+            process = subprocess.Popen(['java', f'-Dui.check.home={root}', '-cp', classpath, 'com.vaadinbench.verifier.UiCheck',
                                         '--daemon', endpoint, token], cwd=root, stdout=log, stderr=log,
                                        env=dict(os.environ, PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD='1'))
             try:
@@ -63,7 +64,7 @@ def main():
                 caller.mkdir()
                 (caller / 'design').symlink_to(design, target_is_directory=True)
                 result = request({'action': 'run', 'cwd': str(caller), 'args': [
-                    '--url', 'http://127.0.0.1:1/employees', '--profile', 'strict',
+                    '--url', 'http://127.0.0.1:1/employees',
                     '--design', 'design', '--output', 'reports/run']})
                 # Navigation deliberately fails after parsing and creates an error report.
                 assert result['exitCode'] == 2, result
