@@ -166,12 +166,18 @@ public final class UiCheck {
     static void daemon(String socket, String token) throws IOException {
         Path path = Path.of(socket);
         if (Files.exists(path)) throw new IOException("Socket already exists: " + path);
-        UnixDomainSocketAddress address = UnixDomainSocketAddress.of(path);
+        // Bind a hidden sibling and move it into place once the channel is listening:
+        // binding creates the socket file before listen(), and a connection made in
+        // that window is refused. Callers take the path's appearance as readiness.
+        Path pending = path.resolveSibling("." + path.getFileName() + ".pending");
+        Files.deleteIfExists(pending);
+        UnixDomainSocketAddress address = UnixDomainSocketAddress.of(pending);
         try (ServerSocketChannel server = ServerSocketChannel.open(StandardProtocolFamily.UNIX);
              Playwright pw = Playwright.create()) {
             Browser browser = BrowserSession.launch(pw);
             try {
             server.bind(address);
+            Files.move(pending, path, StandardCopyOption.ATOMIC_MOVE);
             System.out.println("DAEMON_READY: " + path);
             System.out.flush();
             boolean stopping = false;
@@ -232,7 +238,10 @@ public final class UiCheck {
                 }
             }
             } finally { try { browser.close(); } catch (Exception ignored) { } }
-        } finally { Files.deleteIfExists(path); }
+        } finally {
+            Files.deleteIfExists(path);
+            Files.deleteIfExists(pending);
+        }
     }
 
     private record HttpRequest(String token, com.google.gson.JsonObject json) {}
