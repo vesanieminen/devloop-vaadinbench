@@ -326,7 +326,7 @@ Reproduce against a running reference application inside the task container:
 ```sh
 bash /path/to/scripts/employee-list/benchmark-installed-ui.sh \
   /opt/vaadinbench/ui-check/ui-check http://localhost:8193/employees \
-  /app/design /tmp/ui-check-benchmark lenient 3
+  /app/design /tmp/ui-check-benchmark 3
 ```
 
 Use a new output directory and run one normal check first so the service exists.
@@ -347,6 +347,11 @@ python3 scripts/employee-list/benchmark-ui-check.py \
   /path/to/baseline/ui-check /path/to/current/ui-check \
   /path/to/app/design http://localhost:8193/employees /tmp/ui-check-benchmark 3
 ```
+
+The benchmark provisions missing `profile.txt` files beside the resolved checker
+launchers. Fresh builds both use lenient; if one installation already has a profile,
+that profile is used for both. Conflicting or invalid installed profiles are rejected
+before running any checks, and existing profiles are never overwritten.
 
 This alternates full checks, asserts exact visual measurement parity, tests the
 missing-row failure, and compares repeated cold behavior checks against one persistent
@@ -392,3 +397,6 @@ image first, updating the pinned digests, and then rebuilding both task
 environments with `--force-build`. Image-rebuild detection treats `base/ui-check`
 as an agents-only input. Published digests from revision 3.7.0 do not contain the
 shared command.
+
+The installed `ui-check` uses only the task’s profile. Its CLI does not accept
+`--profile` overrides; lenient and strict tasks must use their own installations.
