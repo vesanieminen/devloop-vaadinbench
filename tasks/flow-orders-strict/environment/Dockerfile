@@ -52,7 +52,9 @@ RUN patch -p1 -d /app </tmp/pom-additions.patch \
     && rm /tmp/pom-additions.patch
 
 RUN mvn -B -o test \
-    && rm -rf /app/target
+    && rm -rf /app/target \
+    && mkdir -p /app/target \
+    && cp -R "$VAADINBENCH_DEV_BUNDLE" /app/target/dev-bundle
 
 # The shared agent image supplies the compiled checker and its dependencies.
 COPY ui-check/ /opt/vaadinbench/ui-check/
