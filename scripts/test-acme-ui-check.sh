@@ -20,9 +20,13 @@ mv "$WORK/build" "$WORK/tool"
 printf '%s\n' "$view" > "$WORK/tool/view.txt"
 printf '%s\n' strict > "$WORK/tool/profile.txt"
 [[ $("$WORK/tool/ui-check" --list | wc -l) -eq 7 ]]
+# The installed task fixes the profile, so install each one in turn rather than
+# asking the command line for it.
 for profile in strict lenient; do
-  "$WORK/tool/ui-check" --url "$URL" --design "$APP_DIR/design" --profile "$profile" --checks all --output "$OUTPUT/$profile"
+  printf '%s\n' "$profile" > "$WORK/tool/profile.txt"
+  "$WORK/tool/ui-check" --url "$URL" --design "$APP_DIR/design" --checks all --output "$OUTPUT/$profile"
 done
+printf '%s\n' strict > "$WORK/tool/profile.txt"
 cp="$WORK/tool/ui-check.jar:$WORK/tool/lib/*"
 javac -cp "$cp" -d "$WORK/classes" "$ROOT/scripts/acme-views/AcmeUiCheckControls.java"
 java -Djava.awt.headless=true -Dui.check.home="$WORK/tool" \
