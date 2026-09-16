@@ -473,7 +473,9 @@ jobs:
                     else
                       docker cp scripts/acme-views/AcmeUiCheckControls.java "$cid:/tmp/AcmeUiCheckControls.java"
                     fi
-                    docker cp scripts/employee-list/benchmark-installed-ui.sh "$cid:/tmp/benchmark-installed-ui.sh"
+                    # The checker benchmark measures the employee-list scenario
+                    # the devloop work is tuned against; other views have none.
+                    [ "$view" != employees ] || docker cp scripts/employee-list/benchmark-installed-ui.sh "$cid:/tmp/benchmark-installed-ui.sh"
                     docker cp "$task/tests/verifier/src/test/resources" "$cid:/tmp/ui-check-protected"
                   fi
                   if ! docker exec -i "$cid" bash -s -- "$expected_exit" "${task##*-}" "$view" \
@@ -484,7 +486,7 @@ jobs:
                   else
                     echo "  ok    $1 -> ui-check exit $expected_exit"
                   fi
-                  if [ "$expected_exit" = 0 ]; then
+                  if [ "$expected_exit" = 0 ] && [ "$view" = employees ]; then
                     docker cp "$cid:/logs/agent/ui-check-benchmark/benchmark.json" "$log/ui-check-benchmark.json" || status=1
                   fi
                   ;;
