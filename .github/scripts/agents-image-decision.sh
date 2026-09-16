@@ -20,5 +20,6 @@ current=$(sed '/^ARG BASE_IMAGE=/d' base/agents.Dockerfile)
 # Both stacks install the shared checker, including classes owned by a modern task.
 # Their agents Dockerfile still uses the root ignore file, unlike the migration base.
 git diff --quiet "$2" HEAD -- .github/scripts/agents-image-decision.sh \
-    .dockerignore base/ui-check tasks/flow-employee-list-strict/tests/verifier/src/test/java || rebuild
+    .dockerignore base/ui-check tasks/flow-employee-list-strict/tests/verifier/src/test/java \
+    tasks/flow-reports-strict/tests/verifier/src/test/java || rebuild
 echo "reuse $published"

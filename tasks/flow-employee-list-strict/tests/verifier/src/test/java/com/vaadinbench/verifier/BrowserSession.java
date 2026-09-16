@@ -38,26 +38,32 @@ final class BrowserSession {
         open(page, url, diagnosticFile, new CheckTimings());
     }
     static void open(Page page, String url, Path diagnosticFile, CheckTimings timings) {
+        open(page, url, diagnosticFile, page.getByTestId("employee-table"), "Employee route", timings);
+        try { assertThat(page.getByTestId("employee-grid").locator("[part~=body-row]").filter(new Locator.FilterOptions().setHas(page.locator("[part~=employee-row-e15]")))).hasCount(1); }
+        catch (AssertionError failure) {
+            throw new ReadinessException("Required employee row e15 did not render; dependent scenarios cannot run", failure);
+        }
+    }
+    static void open(Page page, String url, Path diagnosticFile, Locator readiness, String label) {
+        open(page, url, diagnosticFile, readiness, label, new CheckTimings());
+    }
+    static void open(Page page, String url, Path diagnosticFile, Locator readiness, String label, CheckTimings timings) {
         try (var timer = timings.start("navigation")) {
             try { page.navigate(url); }
             catch (PlaywrightException error) { throw new NavigationException("Cannot navigate to " + url, error); }
         }
-        try (var timer = timings.start("readiness")) { ready(page, diagnosticFile); }
+        try (var timer = timings.start("readiness")) { ready(page, diagnosticFile, readiness, label); }
     }
-    private static void ready(Page page, Path diagnosticFile) {
+    private static void ready(Page page, Path diagnosticFile, Locator readiness, String label) {
         try {
-            assertThat(page.getByTestId("employee-table")).isVisible();
+            assertThat(readiness).isVisible();
         } catch (AssertionError failure) {
             String diagnostic = BrowserDiagnostics.startup(page);
             if (diagnosticFile != null) {
                 try { Files.writeString(diagnosticFile, diagnostic); }
                 catch (IOException error) { failure.addSuppressed(error); }
             }
-            throw new ReadinessException("Employee route did not become ready: " + diagnostic, failure);
-        }
-        try { assertThat(BrowserElements.row(page, "e15")).hasCount(1); }
-        catch (AssertionError failure) {
-            throw new ReadinessException("Required employee row e15 did not render; dependent scenarios cannot run", failure);
+            throw new ReadinessException(label + " did not become ready: " + diagnostic, failure);
         }
         settle(page);
     }
