@@ -242,13 +242,25 @@ class InfiniteGridBrowserVerifierTest {
         int buffered = containerRows();
         page.locator("#no-buffer").click();
         page.waitForFunction("n => document.querySelector('#grid').shadowRoot"
-                + ".querySelector('#container').childNodes.length < n", buffered);
+                + ".querySelector('#container').querySelectorAll(':scope > div.row').length < n", buffered);
         awaitText("#grid #container #cid1_1", "1, 1");
         int unbuffered = containerRows();
         assertTrue(unbuffered >= 11 && unbuffered <= 13,
                 "Without a buffer only the visible rows should exist, not " + unbuffered);
         assertTrue(unbuffered < buffered,
                 "A buffer of 10 rows must add rows beyond the visible " + unbuffered);
+    }
+
+    @Test
+    @DisplayName("row counts ignore declarative template markers and whitespace")
+    void rowCountsIgnoreTemplateMarkers() {
+        openGrid();
+        int rows = containerRows();
+        page.evaluate("() => { const container = document.querySelector('#grid').shadowRoot"
+                + ".querySelector('#container');"
+                + " container.prepend(document.createComment('?lit$test$'), document.createTextNode('  '));"
+                + " container.append(document.createComment('/lit'), document.createTextNode('  ')); }");
+        assertEquals(rows, containerRows(), "Only div.row elements count as rendered rows");
     }
 
     // --------------------------------------------------------- rendering hints
@@ -527,7 +539,7 @@ class InfiniteGridBrowserVerifierTest {
 
     private int containerRows() {
         return ((Number) page.evaluate("() => document.querySelector('#grid')"
-                + ".shadowRoot.querySelector('#container').childNodes.length")).intValue();
+                + ".shadowRoot.querySelector('#container').querySelectorAll(':scope > div.row').length")).intValue();
     }
 
     private int cellsInRow(String rowSelector) {

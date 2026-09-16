@@ -15,7 +15,17 @@ trap 'rm -rf "$WORK"' EXIT
 mkdir -p "$WORK/bin" "$WORK/submission" "$WORK/logs"
 cat >"$WORK/bin/docker" <<'DOCKER'
 #!/bin/bash
+set -e
 printf '%s\n' "$*" >>"$DOCKER_LOG"
+if [[ "$*" == *" up -d --no-build" ]]; then
+  previous=""
+  for arg in "$@"; do
+    if [[ $previous == -f ]]; then override=$arg; fi
+    previous=$arg
+  done
+  grep -q 'image: vb-flow-polymer-to-lit-verifier' "$override"
+  grep -q 'image: vb-flow-polymer-to-lit-submitted-build' "$override"
+fi
 if [[ "$*" == *" exec -T main "* ]] && [ "${FAIL_VERIFIER:-0}" = 1 ]; then
   exit 17
 fi
@@ -33,7 +43,7 @@ assert_cleanup() {
     return 1
   fi
 
-  override=$(awk '/ up -d --build$/ { for (i = 1; i <= NF; i++) if ($i == "-f") path = $(i + 1); print path; exit }' "$log")
+  override=$(awk '/ up -d --(no-)?build$/ { for (i = 1; i <= NF; i++) if ($i == "-f") path = $(i + 1); print path; exit }' "$log")
   if [ -z "$override" ] || [ -e "$override" ]; then
     echo "ASSERTION FAILED: $label left its temporary Compose override behind" >&2
     return 1
@@ -56,5 +66,10 @@ if [ "$failure_rc" -ne 17 ]; then
   exit 1
 fi
 assert_cleanup failure "$failure_log"
+
+DOCKER_LOG="$WORK/prebuilt.log" VB_PREBUILT_IMAGE_PREFIX=vb-flow-polymer-to-lit PATH="$WORK/bin:$PATH" \
+  bash "$VERIFIER" "$WORK/submission" "$WORK/logs"
+assert_cleanup prebuilt "$WORK/prebuilt.log"
+grep -q ' up -d --no-build$' "$WORK/prebuilt.log"
 
 echo "migration verifier cleanup: ok"
