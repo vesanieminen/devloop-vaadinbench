@@ -82,7 +82,12 @@ class Lifecycle(unittest.TestCase):
         with socket.socket() as s:
             s.bind(('127.0.0.1', self.port))
             s.listen()
-            self.assertIn('unmanaged', self.run_app('start', 2).stderr)
+            for action in ('start', 'stop', 'restart'):
+                with self.subTest(action=action):
+                    result = self.run_app(action, 2)
+                    self.assertIn('unmanaged process; no process was killed', result.stderr)
+                    self.assertNotIn('after stopping', result.stderr)
+                    self.assertEqual(s.getsockname()[1], self.port)
 
     def test_compile_failure_and_readiness_timeout(self):
         self.maven("print('compile failed'); raise SystemExit(1)")

@@ -13,4 +13,4 @@ for attempt in $(seq 1 180); do
 done
 if [ "$ready" != true ]; then cat /tmp/baseline-demo.log; exit 1; fi
 classpath=$(cat /opt/vaadinbench/frontend/flow-polymer-to-lit/classpath.txt)
-java -cp "$classpath" /opt/vaadinbench/BaselineSmoke.java || { cat /tmp/baseline-demo.log; exit 1; }
+java -cp "$classpath" /opt/vaadinbench/DemoSmoke.java http://localhost:8081/ || { cat /tmp/baseline-demo.log; exit 1; }

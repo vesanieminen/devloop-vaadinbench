@@ -40,7 +40,7 @@ mvn -o -B -f "$app/pom.xml" -DskipTests package org.apache.maven.plugins:maven-h
 # Exercise the same fixed-goal cache preflight used by the build container.
 python3 "$task/tests/build-check/test-offline-cache.py" /root/.m2/repository \
     >"$logs/build-cache.txt" 2>&1
-# SubmittedDemoSmoke below loads this demo in a real browser, which is what wakes
+# DemoSmoke below loads this demo in a real browser, which is what wakes
 # Copilot; it would then try to fetch release notes over HTTPS, and this stage
 # builds with --network=none, so every attempt would fail the handshake and retry
 # into demo.txt. Nothing this warms is Copilot, so it is switched off.
@@ -52,7 +52,8 @@ for attempt in $(seq 1 180); do
     kill -0 "$demo_pid"
     sleep 1
 done
-java -cp "$(cat "$toolchain/classpath.txt")" "$task/tests/build-check/SubmittedDemoSmoke.java"
+curl -fsS http://localhost:8082/ -o /dev/null
+java -cp "$(cat "$toolchain/classpath.txt")" "$task/tests/build-check/DemoSmoke.java" http://localhost:8082/
 kill "$demo_pid"
 wait "$demo_pid" || true
 trap - EXIT

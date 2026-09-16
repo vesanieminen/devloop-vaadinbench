@@ -35,7 +35,7 @@ running() {
     local -a fields
     read_record || return 1
     for process in /proc/[0-9]*/stat; do
-        current=$(cat "$process" 2>/dev/null) || continue
+        read -r current 2>/dev/null < "$process" || continue
         # Fields following the final ')' start with state, ppid, pgrp, session.
         read -r -a fields <<< "${current##*) }"
         [[ ${fields[0]} != Z && ${fields[2]} == "$pid" && ${fields[3]} == "$pid" ]] || continue
@@ -51,8 +51,9 @@ port_open() {
 }
 
 stop_app() {
-    local sig end delay
+    local sig end delay stopped=false
     if running; then
+        stopped=true
         for sig in TERM KILL; do
             kill -s "$sig" -- "-$pid" 2>/dev/null || true
             delay=10
@@ -63,7 +64,12 @@ stop_app() {
         if running; then fail 'Application did not stop; process record retained'; fi
     fi
     rm -f "$STATE/process"
-    if port_open; then fail "Port $PORT remains occupied after stopping the tracked application"; fi
+    if port_open; then
+        if [[ $stopped == true ]]; then
+            fail "Port $PORT remains occupied after stopping the tracked application"
+        fi
+        fail "Port $PORT is occupied by an unmanaged process; no process was killed"
+    fi
     echo 'Application stopped'
 }
 
