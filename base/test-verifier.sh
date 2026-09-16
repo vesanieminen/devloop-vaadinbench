@@ -476,4 +476,27 @@ assert "compile failure is classified" test "$(cat "$lib_work/logs/failure-reaso
 assert "compiler root cause is retained" grep -q 'cannot find symbol' "$lib_work/logs/compile.log"
 assert "Surefire did not run" test ! -d "$lib_app/target/surefire-reports"
 
+# Image warm-ups restore toolchains under errexit/nounset without vb_init.
+# Exercise a separate shell so the caller's || cannot disable its errexit.
+for reason in missing unreadable; do
+    toolchain="$fe_work/no-such-toolchain"
+    if [ "$reason" = unreadable ]; then
+        toolchain="$fe_toolchain"
+        printf 'invalid json' >"$toolchain/node_modules/.vaadin/vaadin.json"
+    fi
+    rc=0
+    env -u LOG_DIR APP_DIR="$fe_app" VB_FRONTEND_TOOLCHAIN="$toolchain" \
+        bash -euo pipefail -c '. "$1"; vb_restore_frontend_toolchain' \
+        warmup-test "$ROOT/base/verify-lib.sh" >"$fe_work/warmup-$reason.txt" 2>&1 || rc=$?
+    assert "warm-up $reason toolchain stops" test "$rc" -eq 1
+    assert "warm-up $reason toolchain retains its diagnostic" \
+        grep -q "VERIFIER INFRASTRUCTURE ERROR: frontend_toolchain_$reason" "$fe_work/warmup-$reason.txt"
+done
+rc=0
+env -u LOG_DIR bash -euo pipefail -c '. "$1"; fail test_failure' \
+    failure-test "$ROOT/base/verify-lib.sh" >"$fe_work/uninitialised-failure.txt" 2>&1 || rc=$?
+assert "failure without verifier logs retains its exit status" test "$rc" -eq 0
+assert "failure without verifier logs retains its diagnostic" \
+    grep -q 'VERIFIER FAILED: test_failure' "$fe_work/uninitialised-failure.txt"
+
 echo "Verifier entry point and library tests passed."

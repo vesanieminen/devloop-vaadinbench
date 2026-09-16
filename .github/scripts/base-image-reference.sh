@@ -34,7 +34,6 @@ set -uo pipefail
 
 base_image=${1:?the base image the verifier Dockerfiles must name}
 agents_image=${2:?the agents image the environment Dockerfiles must name}
-version=$(tr -d '[:space:]' <base/stack-version.txt)
 
 # $1 the image the reference must name  $2 the files that must agree on it
 check() {
