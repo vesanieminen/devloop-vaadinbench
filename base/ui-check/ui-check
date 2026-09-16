@@ -32,7 +32,7 @@ chmod 700 "$STATE"
 
 usage() {
     cat <<'EOF'
-ui-check uses a local persistent checker by default. The checker survives app-restart.
+ui-check uses a local persistent checker by default. The checker survives application restarts.
   --cold             Run once without reusing the persistent checker (benchmarking only)
   --daemon-status    Show local checker status
   --daemon-stop      Stop the local checker and Chromium

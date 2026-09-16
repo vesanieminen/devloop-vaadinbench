@@ -10,6 +10,7 @@ trap '[[ -z "$BUSY_PID" ]] || kill "$BUSY_PID" 2>/dev/null || true; [[ -z "$ZOMB
 cd "$ROOT"
 python3 scripts/sync-employee-list.py --check
 python3 scripts/employee-list/test-sync.py
+python3 scripts/employee-list/test-benchmark-profiles.py
 python3 scripts/employee-list/test-app-control.py
 mkdir -p "$WORK/tool" "$WORK/bin"
 cp base/ui-check/ui-check "$WORK/tool/ui-check"
