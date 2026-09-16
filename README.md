@@ -303,6 +303,11 @@ instructions install it after project generation. This controls the supplied
 tooling and workflow; it does not prevent an agent with network access from
 installing tools itself.
 
+Devloop supports only the modern Vaadin 25 tasks. The wrapper omits
+`flow-polymer-to-lit` from devloop runs, including the default suite, while
+keeping it under plain conditions. If a condition has no supported tasks in
+your selection, it reports a skip without launching Harbor.
+
 The wrapper materialises devloop task copies under `.condition-tasks/devloop/`,
 keyed by their contents, so concurrent on/off jobs share no mutable task files.
 Keep those copies to resume recorded jobs; remove the cache once those jobs no
