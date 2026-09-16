@@ -55,6 +55,7 @@ stop_app() {
     if running; then
         stopped=true
         for sig in TERM KILL; do
+            running || break
             kill -s "$sig" -- "-$pid" 2>/dev/null || true
             delay=10
             [[ $sig == TERM ]] || delay=3

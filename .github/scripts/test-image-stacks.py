@@ -24,7 +24,7 @@ class ImageStacks(unittest.TestCase):
         self.repo = Path(self.temp.name)
         shutil.copytree(ROOT / '.github/scripts', self.repo / '.github/scripts')
         for task, stack in [('modern-task', 'modern'), ('flow-polymer-to-lit', 'migration')]:
-            self.write(f'tasks/{task}/task.toml', f'image_stack = "{stack}"\n')
+            self.write(f'tasks/{task}/task.toml', f'[metadata]\nimage_stack = "{stack}"\n')
             for kind, ref in [('environment', AGENTS), ('tests', BASE)]:
                 self.write(f'tasks/{task}/{kind}/Dockerfile', f'ARG BASE_IMAGE={ref}\n')
         self.write('base/agents.Dockerfile', f'ARG BASE_IMAGE={BASE}\nFROM ${{BASE_IMAGE}}\nRUN install-agents\n')
@@ -94,7 +94,7 @@ class ImageStacks(unittest.TestCase):
             self.assertEqual(self.decisions(stack), ('reuse', 'rebuild'))
 
     def test_shared_checker_classes_rebuild_migration_agents(self):
-        self.write('tasks/flow-employee-list-strict/task.toml', 'image_stack = "modern"\n')
+        self.write('tasks/flow-employee-list-strict/task.toml', '[metadata]\nimage_stack = "modern"\n')
         self.write('tasks/flow-employee-list-strict/tests/verifier/src/test/java/DesignContract.java', 'changed')
         self.commit()
         self.assertEqual(self.decisions('modern'), ('rebuild', 'rebuild'))
@@ -112,7 +112,7 @@ class ImageStacks(unittest.TestCase):
         self.assertEqual(self.decisions('migration', ''), ('rebuild', 'rebuild'))
 
     def test_task_move_invalidates_both_stacks(self):
-        self.write('tasks/modern-task/task.toml', 'image_stack = "migration"\n')
+        self.write('tasks/modern-task/task.toml', '[metadata]\nimage_stack = "migration"\n')
         self.commit()
         for stack in ['modern', 'migration']:
             self.assertEqual(self.decisions(stack), ('rebuild', 'rebuild'))
@@ -203,7 +203,7 @@ class ImageStacks(unittest.TestCase):
             dict(stack='migration', tasks='tasks/flow-polymer-to-lit',
                  phase=f'controls-{i+1}', shard=i, shards=3, label=f'migration-controls-{i+1}') for i in range(3)]
         modern = [dict(stack='modern', tasks='tasks/modern-task', phase='all', shard=0, shards=1, label='modern-task')]
-        self.write('tasks/second-modern/task.toml', 'image_stack = "modern"\n')
+        self.write('tasks/second-modern/task.toml', '[metadata]\nimage_stack = "modern"\n')
         second = dict(stack='modern', tasks='tasks/second-modern', phase='all', shard=0, shards=1,
                       label='second-modern')
         cases = [('', []), ('tasks/deleted', []),

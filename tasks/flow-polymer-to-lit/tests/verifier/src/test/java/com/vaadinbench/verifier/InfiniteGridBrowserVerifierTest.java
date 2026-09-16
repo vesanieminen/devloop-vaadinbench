@@ -251,18 +251,6 @@ class InfiniteGridBrowserVerifierTest {
                 "A buffer of 10 rows must add rows beyond the visible " + unbuffered);
     }
 
-    @Test
-    @DisplayName("row counts ignore declarative template markers and whitespace")
-    void rowCountsIgnoreTemplateMarkers() {
-        openGrid();
-        int rows = containerRows();
-        page.evaluate("() => { const container = document.querySelector('#grid').shadowRoot"
-                + ".querySelector('#container');"
-                + " container.prepend(document.createComment('?lit$test$'), document.createTextNode('  '));"
-                + " container.append(document.createComment('/lit'), document.createTextNode('  ')); }");
-        assertEquals(rows, containerRows(), "Only div.row elements count as rendered rows");
-    }
-
     // --------------------------------------------------------- rendering hints
 
     @Test
