@@ -27,7 +27,7 @@
 #
 # The base below is the digest the base-image workflow wrote when it last
 # published; the workflow rebuilds this image on top of the base it has just built.
-ARG BASE_IMAGE=ghcr.io/vesanieminen/devloop-vaadinbench-base@sha256:91055cc4ea2ac25d6f2e9fca879ca728f9a5ff7f66ea4270646d2236eb89a6e9
+ARG BASE_IMAGE=ghcr.io/vesanieminen/devloop-vaadinbench-base@sha256:16148e94897463c2ef29073a1425bf7e0ae5cd6421c83b4ca0e46b8e89d0af0d
 # Build the shared public checker once; only its runtime artifact reaches agents.
 FROM maven@sha256:1b1fc6d0168ea616afd1c861d6f32ec37c9ec2ffe88a0351b3771dd4ad86b0d8 AS ui-check-build
 COPY base/ui-check /build/ui-check
