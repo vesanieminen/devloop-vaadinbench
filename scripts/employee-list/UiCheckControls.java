@@ -60,6 +60,7 @@ public final class UiCheckControls {
         profileLock(design, url, output);
         if (args.length == 4 && args[3].equals("--profiles-only")) return;
         outputDirectories(design, url, output);
+        shutdownWarnings();
         var inputs = DesignInputs.directory(design);
         require(inputs.rows().equals(DesignInputs.protectedResources().rows()), "Public/protected fixture rows differ");
         // The installed profile is part of the task, rather than a default
@@ -150,6 +151,16 @@ public final class UiCheckControls {
         System.out.println("UI checker controls passed");
     }
 
+    static void shutdownWarnings() {
+        List<String> warnings = new ArrayList<>();
+        UiCheck.closeResource("Chromium", () -> { throw new java.io.IOException("already disconnected"); }, warnings);
+        AtomicInteger closed = new AtomicInteger();
+        UiCheck.closeResource("Playwright", () -> closed.incrementAndGet(), warnings);
+        UiCheck.closeResource("Not started", null, warnings);
+        require(warnings.equals(List.of("Chromium shutdown: already disconnected")), "Shutdown failure not retained as a warning");
+        require(closed.get() == 1, "First shutdown failure prevented remaining cleanup");
+    }
+
     static void performanceControls(Path design, String url, Path output) throws Exception {
         for (String[] bad : List.of(new String[]{"--scenario", "noSuchScenario"},
                 new String[]{"--checks", "visual", "--scenario", "bothReferenceScreenshots"})) {
@@ -194,6 +205,21 @@ public final class UiCheckControls {
                         e.getAsJsonObject().get("status").getAsString().equals("skipped")).count() == 5, "Wrong scenario selection");
                 require(selectedReport.getAsJsonObject("timings").has("navigation"), "Missing phase timing");
             }
+            // A directory appearing after parse makes atomic publication fail.
+            // Keep that existing output, but remove our unpublished nested artifacts.
+            Path destination = output.resolve("publication-failure");
+            var unpublished = UiCheck.parse(new String[]{"--url", url, "--design", design.toString(),
+                    "--scenario", "tableScrollKeepsShellAndHeaderStill", "--output", destination.toString()});
+            Files.createDirectories(destination);
+            Path marker = Files.writeString(destination.resolve("keep.txt"), "existing output");
+            Files.createDirectories(unpublished.workingOutput().resolve("nested"));
+            Files.writeString(unpublished.workingOutput().resolve("nested/partial.txt"), "partial output");
+            try {
+                UiCheck.run(unpublished, new CheckTimings(), browser);
+                throw new AssertionError("Non-empty destination overwritten");
+            } catch (java.io.IOException expected) { /* intentional publication failure */ }
+            require(!Files.exists(unpublished.workingOutput()), "Unpublished output leaked after failure");
+            require(Files.readString(marker).equals("existing output"), "Existing published output changed");
         } finally { server.stop(0); }
         Process session = new ProcessBuilder(Path.of(System.getProperty("java.home"), "bin/java").toString(),
                 "-Dui.check.home=" + System.getProperty("ui.check.home"), "-cp", System.getProperty("java.class.path"),

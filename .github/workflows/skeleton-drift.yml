@@ -36,6 +36,8 @@ on:
       - "tasks/*/tests/expected/**"
       - "tasks/*/task.toml"
       - ".github/workflows/skeleton-drift.yml"
+      - ".github/scripts/*skeleton-overlay.py"
+      - "tasks/*/tests/*pom.patch"
 
 jobs:
   drift:
@@ -44,6 +46,9 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
+
+      - name: Test version-tolerant overlay and structural drift detection
+        run: python3 .github/scripts/test-skeleton-overlay.py
 
       - name: Compare each recorded project against a fresh download
         run: |
@@ -83,7 +88,7 @@ jobs:
             rm -rf "$live/.git"
             overlay=$(sed -n 's/^generated_pom_overlay *= *"\(.*\)"/\1/p' "$task/task.toml")
             if [ -n "$overlay" ]; then
-              if ! patch -p1 -d "$live" -s <"$task/$overlay"; then
+              if ! python3 .github/scripts/apply-skeleton-overlay.py "$live" "$task/$overlay"; then
                 echo "::error::$name: stack overlay no longer applies to $url"
                 status=1
                 continue
