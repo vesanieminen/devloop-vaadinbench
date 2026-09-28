@@ -39,8 +39,8 @@ class OverlayTests(unittest.TestCase):
                               text=True, capture_output=True)
 
     def test_release_bump_preserves_preview_pins_and_exact_scaffold(self):
-        self.change('<vaadin.version>25.2.6</vaadin.version>',
-                    '<vaadin.version>25.2.8</vaadin.version>')
+        self.change('<vaadin.version>25.3.0</vaadin.version>',
+                    '<vaadin.version>25.3.1</vaadin.version>')
         result = self.apply()
         self.assertEqual(result.returncode, 0, result.stderr)
         pom = (self.project / 'pom.xml').read_text()
@@ -60,7 +60,7 @@ class OverlayTests(unittest.TestCase):
         self.assertNotEqual(self.compare().returncode, 0)
 
     def test_missing_version_is_rejected(self):
-        self.change('<vaadin.version>25.2.6</vaadin.version>', '')
+        self.change('<vaadin.version>25.3.0</vaadin.version>', '')
         self.assertNotEqual(self.apply().returncode, 0)
 
 
