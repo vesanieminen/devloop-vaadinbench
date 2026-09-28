@@ -80,7 +80,22 @@ if [ "$expected" = 0 ]; then
     control=UiCheckControls
     [ "$view" = employees ] || control=AcmeUiCheckControls
     javac -cp "$checker_cp" -d /tmp/ui-check-control-classes "/tmp/$control.java"
-    java -Djava.awt.headless=true -Dui.check.home="$tool" \
-        -cp "/tmp/ui-check-control-classes:$checker_cp:/tmp/ui-check-protected" \
-        "com.vaadinbench.verifier.$control" /app/design "http://localhost:8193/$view" /tmp/ui-check-controls
+    # A Chromium process can occasionally crash on the CI runner after the
+    # installed checker has passed. Retry only that native browser crash; a
+    # failed assertion or application error must still fail this control.
+    for attempt in 1 2; do
+        control_log="/tmp/ui-check-controls-$attempt.log"
+        if java -Djava.awt.headless=true -Dui.check.home="$tool" \
+            -cp "/tmp/ui-check-control-classes:$checker_cp:/tmp/ui-check-protected" \
+            "com.vaadinbench.verifier.$control" /app/design "http://localhost:8193/$view" \
+            "/tmp/ui-check-controls-$attempt" >"$control_log" 2>&1; then
+            cat "$control_log"
+            break
+        fi
+        cat "$control_log"
+        if [ "$attempt" -eq 2 ] || ! grep -Eq '\[pid=[0-9]+\]\[err\] Received signal 11' "$control_log"; then
+            exit 1
+        fi
+        echo 'Chromium crashed; retrying UI checker controls once with a fresh browser'
+    done
 fi
