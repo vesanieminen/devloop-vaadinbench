@@ -21,9 +21,7 @@ COPY app/ /app/
 # `test` (rather than dependency:go-offline) is what exercises the Surefire
 # provider and the test-scoped dependencies, so run the real thing.
 RUN mvn -B -o test \
-    && rm -rf /app/target \
-    && mkdir -p /app/target \
-    && cp -R "$VAADINBENCH_DEV_BUNDLE" /app/target/dev-bundle
+    && rm -rf /app/target
 
 # DEVLOOP_SETUP: condition tooling is installed here before the baseline.
 
