@@ -38,14 +38,15 @@ class OverlayTests(unittest.TestCase):
                                'compare', '--exact', str(TASK / 'tests/expected'), str(self.project)],
                               text=True, capture_output=True)
 
-    def test_release_bump_preserves_preview_pins_and_exact_scaffold(self):
+    def test_release_bump_preserves_stack_pins_and_exact_scaffold(self):
         self.change('<vaadin.version>25.3.0</vaadin.version>',
                     '<vaadin.version>25.3.1</vaadin.version>')
         result = self.apply()
         self.assertEqual(result.returncode, 0, result.stderr)
         pom = (self.project / 'pom.xml').read_text()
-        self.assertIn('<vaadin.version>25.3.0-alpha8</vaadin.version>', pom)
-        self.assertIn('<flow.version>25.3-SNAPSHOT</flow.version>', pom)
+        self.assertIn('<vaadin.version>25.3.0</vaadin.version>', pom)
+        self.assertNotIn('<vaadin.version>25.3.1</vaadin.version>', pom)
+        self.assertIn('<flow.version>25.3.0</flow.version>', pom)
         result = self.compare()
         self.assertEqual(result.returncode, 0, result.stdout)
 
